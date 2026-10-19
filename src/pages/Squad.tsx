@@ -7,7 +7,8 @@ import type { Player } from '../types'
 
 function Stat({ value, label }: { value: number | string; label: string }) {
   return (
-    <div className="text-center">
+    // Mobitel: redak "NAZIV ··· broj"; od sm naviše: broj iznad naziva, u stupcu
+    <div className="flex flex-row-reverse items-baseline justify-between sm:block sm:text-center">
       <div className="font-display text-lg font-extrabold tabular-nums">{value}</div>
       <div className="text-muted text-[10px] uppercase tracking-wide">{label}</div>
     </div>
@@ -36,7 +37,7 @@ function PlayerCard({ player }: { player: Player }) {
       </div>
       <div className="flex flex-1 flex-col p-4">
         <h3 className="mb-4 font-display text-lg font-bold leading-tight">{player.name}</h3>
-        <div className="mt-auto grid grid-cols-3 gap-2 border-t border-app pt-4">
+        <div className="mt-auto grid gap-1 border-t border-app pt-3 sm:grid-cols-3 sm:gap-2 sm:pt-4">
           <Stat value={player.appearances} label="Nastupi" />
           <Stat value={player.minutes} label="Minute" />
           {isGK ? (
