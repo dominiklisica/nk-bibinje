@@ -92,9 +92,14 @@ function MatchRow({ match }: { match: Match }) {
 
 export default function Matches() {
   const [filter, setFilter] = useState<Filter>('all')
+  // Odigrane od najnovije prema starijima, zatim nadolazeće kronološki.
   const all = bibinjeMatches()
-  const shown = all.filter((m) =>
-    filter === 'all' ? true : m.status === filter,
+  const groups: { key: Exclude<Filter, 'all'>; title: string; matches: Match[] }[] = [
+    { key: 'finished', title: 'Odigrane', matches: all.filter((m) => m.status === 'finished').reverse() },
+    { key: 'upcoming', title: 'Nadolazeće', matches: all.filter((m) => m.status === 'upcoming') },
+  ]
+  const shown = groups.filter(
+    (g) => g.matches.length > 0 && (filter === 'all' || filter === g.key),
   )
 
   const filters: { key: Filter; label: string }[] = [
@@ -109,6 +114,8 @@ export default function Matches() {
         title="Utakmice"
         subtitle="Raspored i rezultati NK Bibinje u sezoni 2026/27."
         bgImage="/slike/utakmice.jpg"
+        imgPosition="center 7%"
+        tall
       />
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         <div className="mb-6 inline-flex rounded-full border border-app p-1" style={{ backgroundColor: 'var(--surface)' }}>
@@ -126,11 +133,22 @@ export default function Matches() {
           ))}
         </div>
 
-        <div className="grid gap-3">
-          {shown.map((m, i) => (
-            <Reveal key={m.id} delay={Math.min(i * 0.04, 0.25)}>
-              <MatchRow match={m} />
-            </Reveal>
+        <div className="grid gap-10">
+          {shown.map((g) => (
+            <section key={g.key}>
+              <h2 className="mb-4 flex items-center gap-3 font-display text-2xl font-extrabold uppercase tracking-tight">
+                <span className="h-1 w-8 rounded-full" style={{ background: 'var(--club-primary)' }} />
+                {g.title}
+                <span className="text-muted text-base font-bold">({g.matches.length})</span>
+              </h2>
+              <div className="grid gap-3">
+                {g.matches.map((m, i) => (
+                  <Reveal key={m.id} delay={Math.min(i * 0.04, 0.25)}>
+                    <MatchRow match={m} />
+                  </Reveal>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
 

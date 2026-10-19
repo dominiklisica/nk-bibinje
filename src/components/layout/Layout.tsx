@@ -17,6 +17,7 @@ export default function Layout() {
   return (
     <div className="flex min-h-dvh flex-col">
       <ScrollToTop />
+      <div className="crest-watermark" aria-hidden="true" />
       <Navbar theme={theme} toggleTheme={toggle} />
       <main className="flex-1">
         <Outlet />

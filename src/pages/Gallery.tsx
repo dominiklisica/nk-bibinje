@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
-import { GALLERY, GALLERY_SOURCE } from '../data/gallery'
+import { GALLERY } from '../data/gallery'
 
 function Lightbox({
   index,
@@ -104,6 +104,8 @@ export default function Gallery() {
       <PageHeader
         title="Galerija"
         subtitle="Fotografije utakmica, slavlja i atmosfere NK Bibinje."
+        bgImage="/slike/galerija-zaglavlje.jpg"
+        imgPosition="center 45%"
       />
 
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
@@ -128,20 +130,6 @@ export default function Gallery() {
             </Reveal>
           ))}
         </div>
-
-        <p className="text-muted mt-6 text-sm">
-          Izvor fotografija: službena Facebook stranica NK Bibinje. Dodatne
-          fotografije mogu se dodati kroz administratorsko sučelje.{' '}
-          <a
-            href={GALLERY_SOURCE}
-            target="_blank"
-            rel="noreferrer"
-            className="text-[var(--club-primary)] hover:underline"
-          >
-            Posjeti stranicu
-          </a>
-          .
-        </p>
       </div>
 
       <AnimatePresence>

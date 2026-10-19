@@ -1,7 +1,11 @@
-import { ExternalLink, Calendar } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { ExternalLink, Calendar, ChevronRight } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
 import { NEWS, NEWS_SOURCE, type NewsCategory } from '../data/news'
+
+const LINK_CLASS =
+  'mt-5 mr-5 inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-[var(--club-primary)] hover:underline'
 
 const CAT_STYLE: Record<NewsCategory, string> = {
   Najava: 'var(--club-primary)',
@@ -22,7 +26,9 @@ export default function News() {
     <div>
       <PageHeader
         title="Vijesti"
-        subtitle="Najave, izvještaji i obavijesti sa službene stranice NK Bibinje."
+        subtitle="Najave, izvještaji i obavijesti NK Bibinje."
+        bgImage="/slike/vijesti.jpg"
+        imgPosition="center 40%"
       />
 
       <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -62,24 +68,29 @@ export default function News() {
                     ))}
                   </div>
 
-                  <a
-                    href={NEWS_SOURCE}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-5 inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-[var(--club-primary)] hover:underline"
-                  >
-                    Službena objava <ExternalLink size={15} />
-                  </a>
+                  {item.matchId && (
+                    <Link
+                      to={`/utakmice/${item.matchId}`}
+                      className={LINK_CLASS}
+                    >
+                      Detalji utakmice <ChevronRight size={15} />
+                    </Link>
+                  )}
+                  {item.facebook && (
+                    <a
+                      href={NEWS_SOURCE}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={LINK_CLASS}
+                    >
+                      Službena objava <ExternalLink size={15} />
+                    </a>
+                  )}
                 </div>
               </article>
             </Reveal>
           ))}
         </div>
-
-        <p className="text-muted mt-8 text-sm">
-          Izvor: službena Facebook stranica NK Bibinje. Nove vijesti dodavat će se
-          kroz administratorsko sučelje (Supabase faza).
-        </p>
       </div>
     </div>
   )

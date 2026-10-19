@@ -30,7 +30,9 @@ export default function Stats() {
     <div>
       <PageHeader
         title="Statistika"
-        subtitle="Sezonski učinak NK Bibinje — izračunato iz odigranih utakmica."
+        subtitle="Sezonski učinak NK Bibinje."
+        bgImage="/slike/galerija/slavlje-3.jpg"
+        imgPosition="center 12%"
       />
       <Reveal className="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6">
         <section>

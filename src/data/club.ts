@@ -17,5 +17,5 @@ export const CLUB: ClubInfo = {
 export const HNS_SOURCE: SourceMeta = {
   source: 'HNS Semafor (COMET)',
   url: 'https://semafor.hns.family/klubovi/213/nk-bibinje/',
-  lastUpdated: '2026-10-16',
+  lastUpdated: '2026-10-19',
 }

@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Originalne slike u korijenu projekta — kopije su u public/
+/*.jpg
+/*.jpeg
+/*.png
+/*.webp

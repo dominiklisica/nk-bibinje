@@ -91,6 +91,27 @@
   color: var(--text-muted);
 }
 
+/* Blijedi obris grba u pozadini svih stranica — vidi se samo na
+   svjetlozelenoj pozadini, kartice i zaglavlja ga prekrivaju.
+   "multiply" uklanja bijelu podlogu JPEG-a, pa ostaju samo linije grba. */
+.crest-watermark {
+  position: fixed;
+  /* Počinje ispod navigacije (h-16) — poluprozirna traka ga ne smije otkrivati */
+  inset: 4rem 0 0 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url('/grb.jpg') center / min(75vmin, 680px) no-repeat;
+  filter: grayscale(1) contrast(1.3);
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+/* Tamna tema: invertiran grb uz "screen" — crna podloga nestaje, linije su svijetle */
+:root.dark .crest-watermark {
+  filter: grayscale(1) contrast(1.3) invert(1);
+  opacity: 0.04;
+  mix-blend-mode: screen;
+}
+
 /* Reusable prijelaz za hover kartice */
 .card-hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;

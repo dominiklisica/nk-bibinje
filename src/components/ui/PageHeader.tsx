@@ -11,12 +11,15 @@ export default function PageHeader({
   children,
   bgImage,
   imgPosition = 'center',
+  tall = false,
 }: {
   title: string
   subtitle?: string
   children?: ReactNode
   bgImage?: string
   imgPosition?: string
+  /** Više zaglavlje — za fotografije koje bi se u standardnoj visini previše izrezale. */
+  tall?: boolean
 }) {
   const hasImg = !!bgImage
   return (
@@ -44,7 +47,7 @@ export default function PageHeader({
       )}
       <div
         className={`relative mx-auto flex max-w-7xl flex-col justify-end px-4 pb-12 pt-28 sm:px-6 ${
-          hasImg ? 'min-h-[460px] text-white' : ''
+          hasImg ? `${tall ? 'min-h-[640px]' : 'min-h-[460px]'} text-white` : ''
         }`}
       >
         <motion.div

@@ -101,8 +101,8 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               className="mt-4 max-w-xl text-lg text-white/85"
             >
-              {CLUB.fullName} · osnovan {CLUB.founded}. Službena stranica s
-              rezultatima, rasporedom, tablicom i statistikom.
+              {CLUB.fullName} osnovan je {CLUB.founded} godine. Na službenoj
+              stranici kluba pratite rezultate, raspored, tablicu i statistiku.
             </motion.p>
 
             <motion.div
@@ -189,27 +189,30 @@ export default function Home() {
                 .slice()
                 .reverse()
                 .map((r) => (
-                  <div
+                  <Link
                     key={r.match.id}
-                    className="card-hover rounded-xl border border-app p-4"
+                    to={`/utakmice/${r.match.id}`}
+                    className="card-hover block rounded-xl border border-app p-4"
                     style={{ backgroundColor: 'var(--surface)' }}
                   >
                     <div className="text-muted flex items-center justify-between text-xs">
                       <span>{formatDate(r.match.date)}</span>
                       <OutcomeChip outcome={r.outcome} />
                     </div>
-                    <div className="mt-3 flex items-center justify-between">
-                      <span className="font-display font-bold">
-                        {r.isHome ? CLUB_NAME : r.opponent}
+                    <div className="mt-3 flex items-center justify-between gap-2">
+                      <span className="flex min-w-0 flex-1 items-center gap-2">
+                        <ClubCrest name={r.match.home} size={28} />
+                        <span className="font-display font-bold leading-tight">{r.match.home}</span>
                       </span>
-                      <span className="font-display text-xl font-extrabold tabular-nums">
+                      <span className="shrink-0 font-display text-xl font-extrabold tabular-nums">
                         {r.match.homeScore} : {r.match.awayScore}
                       </span>
-                      <span className="font-display font-bold">
-                        {r.isHome ? r.opponent : CLUB_NAME}
+                      <span className="flex min-w-0 flex-1 items-center justify-end gap-2 text-right">
+                        <span className="font-display font-bold leading-tight">{r.match.away}</span>
+                        <ClubCrest name={r.match.away} size={28} />
                       </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
             </div>
             <div className="mt-3">

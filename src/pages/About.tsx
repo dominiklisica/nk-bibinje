@@ -64,7 +64,7 @@ export default function About() {
         title="O klubu"
         subtitle="Povijest, identitet i najveći uspjesi Nogometnog kluba Bibinje."
         bgImage="/slike/o-klubu.jpg?v=2"
-        imgPosition="center 22%"
+        imgPosition="center 40%"
       />
 
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
@@ -179,14 +179,6 @@ export default function About() {
             ))}
           </div>
         </Reveal>
-
-        {/* Izvori / napomena */}
-        <p className="text-muted mt-10 text-sm">
-          Izvori povijesnih podataka: Općina Bibinje (bibinje.hr), Hrvatska
-          Wikipedija i HNS Semafor. Detaljnija povijest, fotografije i imena
-          zaslužnih ljudi kluba mogu se dodati kroz administratorsko sučelje —
-          bez izmišljenih podataka.
-        </p>
       </div>
     </div>
   )

@@ -11,7 +11,7 @@ export const MATCHES: Match[] = [
   { id: 'm02', date: '2026-09-27', time: '16:30', home: "NK Škabrnja '91", away: 'NK Bibinje', homeScore: 3, awayScore: 0, competition: COMP, status: 'finished' },
   { id: 'm03', date: '2026-10-03', time: '16:30', home: 'NK Bibinje', away: 'NŠK Zlatna Luka', homeScore: 0, awayScore: 2, competition: COMP, venue: STADIUM, status: 'finished' },
   { id: 'm04', date: '2026-10-07', time: '16:30', home: 'NŠK Zemunik', away: 'NK Bibinje', homeScore: 2, awayScore: 7, competition: COMP, status: 'finished' },
-  { id: 'm05', date: '2026-10-17', time: '18:00', home: 'NK Sabunjar', away: 'NK Bibinje', homeScore: null, awayScore: null, competition: COMP, status: 'upcoming' },
+  { id: 'm05', date: '2026-10-17', time: '18:00', home: 'NK Sabunjar', away: 'NK Bibinje', homeScore: 3, awayScore: 2, competition: COMP, status: 'finished' },
   { id: 'm06', date: '2026-10-21', time: '16:00', home: 'NK Bibinje', away: 'NŠK Raštane', homeScore: null, awayScore: null, competition: COMP, venue: STADIUM, status: 'upcoming' },
   { id: 'm07', date: '2026-10-24', time: '15:30', home: 'NK Bibinje', away: 'NK Dragovoljac', homeScore: null, awayScore: null, competition: COMP, venue: STADIUM, status: 'upcoming' },
   { id: 'm08', date: '2026-11-01', time: '14:30', home: 'NŠK Debeljak', away: 'NK Bibinje', homeScore: null, awayScore: null, competition: COMP, status: 'upcoming' },

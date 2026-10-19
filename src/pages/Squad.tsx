@@ -18,12 +18,12 @@ function PlayerCard({ player }: { player: Player }) {
   const isGK = player.position === 'GK'
   return (
     <div
-      className="card-hover overflow-hidden rounded-2xl border border-app"
+      className="card-hover flex h-full flex-col overflow-hidden rounded-2xl border border-app"
       style={{ backgroundColor: 'var(--surface)' }}
     >
       {/* Fotografija igrača ako postoji; inače uredan placeholder s brojem. */}
       <div
-        className="relative flex aspect-square items-end justify-between p-4"
+        className="relative flex aspect-[4/5] items-end justify-between p-3"
         style={{ background: 'linear-gradient(135deg, var(--club-primary-700), var(--club-primary))' }}
       >
         <PlayerPhoto player={player} />
@@ -34,9 +34,9 @@ function PlayerCard({ player }: { player: Player }) {
           {isGK ? 'Vratar' : 'Igrač'}
         </span>
       </div>
-      <div className="p-4">
-        <h3 className="font-display text-lg font-bold leading-tight">{player.name}</h3>
-        <div className="mt-4 grid grid-cols-3 gap-2 border-t border-app pt-4">
+      <div className="flex flex-1 flex-col p-4">
+        <h3 className="mb-4 font-display text-lg font-bold leading-tight">{player.name}</h3>
+        <div className="mt-auto grid grid-cols-3 gap-2 border-t border-app pt-4">
           <Stat value={player.appearances} label="Nastupi" />
           <Stat value={player.minutes} label="Minute" />
           {isGK ? (
@@ -45,20 +45,19 @@ function PlayerCard({ player }: { player: Player }) {
             <Stat value={player.goals} label="Golovi" />
           )}
         </div>
-        {(player.yellowCards > 0 || player.redCards > 0) && (
-          <div className="mt-3 flex items-center justify-center gap-3 text-xs text-muted">
-            {player.yellowCards > 0 && (
-              <span className="inline-flex items-center gap-1">
-                <span className="inline-block h-3 w-2.5 rounded-sm bg-[#f1c40f]" /> {player.yellowCards}
-              </span>
-            )}
-            {player.redCards > 0 && (
-              <span className="inline-flex items-center gap-1">
-                <span className="inline-block h-3 w-2.5 rounded-sm bg-[#c0392b]" /> {player.redCards}
-              </span>
-            )}
-          </div>
-        )}
+        {/* Red s kartonima uvijek zauzima mjesto — sve kartice su iste visine */}
+        <div className="mt-3 flex h-4 items-center justify-center gap-3 text-xs text-muted">
+          {player.yellowCards > 0 && (
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-3 w-2.5 rounded-sm bg-[#f1c40f]" /> {player.yellowCards}
+            </span>
+          )}
+          {player.redCards > 0 && (
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-3 w-2.5 rounded-sm bg-[#c0392b]" /> {player.redCards}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -72,9 +71,9 @@ function Group({ title, players }: { title: string; players: Player[] }) {
         {title}
         <span className="text-muted text-base font-semibold">({players.length})</span>
       </h2>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {players.map((p, i) => (
-          <Reveal key={p.id} delay={Math.min((i % 4) * 0.06, 0.24)}>
+          <Reveal key={p.id} delay={Math.min((i % 4) * 0.06, 0.24)} className="h-full">
             <PlayerCard player={p} />
           </Reveal>
         ))}
@@ -90,13 +89,7 @@ export default function Squad() {
         title="Momčad"
         subtitle="Sastav NK Bibinje u sezoni 2026/27 sa statistikom nastupa."
         bgImage="/slike/momcad.jpg"
-      >
-        <p className="mt-4 max-w-2xl text-sm text-white/80">
-          Službeni izvor (HNS) razlikuje vratare i ostale igrače. Detaljnije
-          pozicije (branič / vezni / napadač) i fotografije dodat ćemo kroz
-          administratorsko sučelje, bez izmišljanja podataka.
-        </p>
-      </PageHeader>
+      />
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <Group title="Vratari" players={goalkeepers()} />
         <Group title="Igrači" players={outfielders()} />

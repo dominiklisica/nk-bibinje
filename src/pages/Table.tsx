@@ -22,6 +22,8 @@ export default function Table() {
       <PageHeader
         title="Prvenstvena tablica"
         subtitle={`${CLUB.league} · sezona ${CLUB.season}`}
+        bgImage="/slike/tablica-hd.jpg"
+        imgPosition="center 60%"
       />
       <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
         <Reveal
