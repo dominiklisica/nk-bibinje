@@ -163,17 +163,8 @@ export default function Stats() {
               </tbody>
             </table>
           </div>
-          <p className="text-muted mt-2 text-xs">
-            Igrači su poredani po odigranim minutama. Kod vratara se golovi ne
-            prikazuju (relevantan je broj primljenih — vidi stranicu Momčad).
-          </p>
         </section>
 
-        <p className="text-muted text-sm">
-          Napomena: interaktivni grafikoni (kretanje bodova kroz sezonu) dolaze u
-          sljedećoj fazi. Gdje podatak nije dostupan, prikazat ćemo „Podatak nije
-          dostupan" umjesto procjene.
-        </p>
         <SourceTag />
       </Reveal>
     </div>
