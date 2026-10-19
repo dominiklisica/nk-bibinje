@@ -1,0 +1,38 @@
+import type { Player } from '../types'
+
+// Sastav NK Bibinje — sezona 2026/27. Izvor: HNS Semafor (COMET).
+// Napomena: službeni izvor razlikuje samo vratare ("Vratar") i ostale ("Igrač"),
+// pa detaljnije pozicije (branič/vezni/napadač) nisu ovdje izmišljene.
+// Kod vratara je "goalsConceded" (primljeni), a postignuti golovi su 0.
+//
+// FOTOGRAFIJE: kad budu dostupne (uz prava korištenja), spremi ih u
+// /public/players/ i dodaj igraču polje npr. photo: '/players/silov.jpg'.
+// Dok ne postoje, kartica prikazuje uredan placeholder s brojem.
+export const SQUAD: Player[] = [
+  { id: 'p-cindric', number: 12, name: 'Ivan Cindrić', position: 'GK', appearances: 3, minutes: 270, goals: 0, goalsConceded: 6, yellowCards: 0, redCards: 0 },
+  { id: 'p-mlisica', number: 1, name: 'Mateo Lisica', position: 'GK', appearances: 1, minutes: 90, goals: 0, goalsConceded: 2, yellowCards: 1, redCards: 0 },
+
+  { id: 'p-bralic', number: 13, name: 'Mateo Bralić', position: 'OUTFIELD', appearances: 3, minutes: 159, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-brunetti', number: 7, name: 'Francesco Antonio Brunetti', position: 'OUTFIELD', appearances: 2, minutes: 81, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-bugarija', number: 19, name: 'Mate Bugarija', position: 'OUTFIELD', appearances: 1, minutes: 21, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-jdelija', number: 14, name: 'Jakov Delija', position: 'OUTFIELD', appearances: 1, minutes: 45, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-rdelija', number: 2, name: 'Roko Delija', position: 'OUTFIELD', appearances: 4, minutes: 225, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-erstic', number: 5, name: 'Luka Erstić', position: 'OUTFIELD', appearances: 1, minutes: 86, goals: 1, yellowCards: 0, redCards: 0 },
+  { id: 'p-frleta', number: 4, name: 'Tomislav Frleta', position: 'OUTFIELD', appearances: 2, minutes: 90, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-gambiraza', number: 20, name: 'Stipe Gambiraža', position: 'OUTFIELD', appearances: 3, minutes: 239, goals: 1, yellowCards: 1, redCards: 1 },
+  { id: 'p-bkatusa', number: 5, name: 'Blaž Katuša', position: 'OUTFIELD', appearances: 2, minutes: 180, goals: 0, yellowCards: 1, redCards: 0 },
+  { id: 'p-dkatusa', number: 20, name: 'David Katuša', position: 'OUTFIELD', appearances: 4, minutes: 160, goals: 1, yellowCards: 0, redCards: 0 },
+  { id: 'p-kozul', number: 10, name: 'Marko Kožul', position: 'OUTFIELD', appearances: 4, minutes: 271, goals: 1, yellowCards: 0, redCards: 0 },
+  { id: 'p-alisica', number: 9, name: 'Ante Lisica', position: 'OUTFIELD', appearances: 4, minutes: 180, goals: 0, yellowCards: 1, redCards: 0 },
+  { id: 'p-dlisica', number: 3, name: 'Dominik Lisica', position: 'OUTFIELD', appearances: 3, minutes: 118, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-elisica', number: 14, name: 'Enzo Lisica', position: 'OUTFIELD', appearances: 4, minutes: 270, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-alonic', number: 22, name: 'Ante Lonić', position: 'OUTFIELD', appearances: 1, minutes: 4, goals: 0, yellowCards: 1, redCards: 0 },
+  { id: 'p-dlonic', number: 18, name: 'Domagoj Lonić', position: 'OUTFIELD', appearances: 2, minutes: 54, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-lukic', number: 11, name: 'Mate Lukić', position: 'OUTFIELD', appearances: 4, minutes: 270, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-milanovic', number: 17, name: 'Davorin Milanović', position: 'OUTFIELD', appearances: 3, minutes: 214, goals: 1, yellowCards: 0, redCards: 0 },
+  { id: 'p-novoselic', number: 4, name: 'Matej Novoselić', position: 'OUTFIELD', appearances: 3, minutes: 225, goals: 1, yellowCards: 0, redCards: 0 },
+  { id: 'p-osmancevic', number: 16, name: 'Matija Osmančević', position: 'OUTFIELD', appearances: 3, minutes: 270, goals: 0, yellowCards: 1, redCards: 0 },
+  { id: 'p-rezan', number: 15, name: 'Dino Režan', position: 'OUTFIELD', appearances: 0, minutes: 0, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-sekula', number: 16, name: 'Lucijan Sekula', position: 'OUTFIELD', appearances: 3, minutes: 57, goals: 0, yellowCards: 0, redCards: 0 },
+  { id: 'p-silov', number: 21, name: 'Stipe Silov', position: 'OUTFIELD', appearances: 4, minutes: 350, goals: 4, yellowCards: 1, redCards: 0 },
+]

@@ -1,0 +1,100 @@
+@import 'tailwindcss';
+
+/* Dark mode temeljen na klasi .dark na <html> (ručni prebacivač) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* =========================================================
+   IDENTITET KLUBA — PLACEHOLDER BOJE
+   Ovdje mijenjamo kad dobijemo službeni grb i boje NK Bibinje.
+   Sve na stranici koristi ove varijable, pa je promjena na
+   jednom mjestu.
+   ========================================================= */
+:root {
+  --club-primary: #138a3c;   /* zelena — službena boja NK Bibinje */
+  --club-primary-700: #0d6b2d;
+  --club-primary-300: #5ec97e; /* svjetlija zelena nijansa */
+  --club-accent: #37b24d;    /* svjetlija zelena za akcente */
+  --club-red: #ce1b2a;       /* crvena iz šahovnice — suptilan sekundarni akcent */
+  --club-red-700: #a3141f;
+  --club-ink: #0b0e13;       /* crna iz grba */
+}
+
+@theme {
+  --color-club: var(--club-primary);
+  --color-club-700: var(--club-primary-700);
+  --color-club-300: var(--club-primary-300);
+  --color-club-accent: var(--club-accent);
+  --color-club-red: var(--club-red);
+  --color-club-ink: var(--club-ink);
+
+  --font-display: 'Barlow Condensed', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+/* =========================================================
+   Semantičke površine za light/dark (preko varijabli)
+   ========================================================= */
+:root {
+  /* Svijetla tema — svjetlozelena pozadina uz bijele kartice (boje kluba) */
+  --bg: #e4f1e4;
+  --surface: #ffffff;
+  --surface-2: #d6ebd8;
+  --border: #c7e0c9;
+  --text: #0c1a11;
+  --text-muted: #51684f;
+}
+:root.dark {
+  /* Tamna tema — duboka zeleno-crna (ton grba) */
+  --bg: #08130c;
+  --surface: #0e1c12;
+  --surface-2: #14271a;
+  --border: #244029;
+  --text: #eef5ef;
+  --text-muted: #93a897;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Povećan osnovni font radi bolje čitljivosti (sve mjere su u rem,
+       pa se proporcionalno povećava cijela stranica). */
+    font-size: 112.5%; /* 18px umjesto 16px */
+  }
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--club-accent);
+    color: var(--club-ink);
+  }
+  /* Tanki moderni scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+}
+
+/* Pomoćne klase vezane uz semantičke varijable */
+@utility surface {
+  background-color: var(--surface);
+}
+@utility surface-2 {
+  background-color: var(--surface-2);
+}
+@utility border-app {
+  border-color: var(--border);
+}
+@utility text-muted {
+  color: var(--text-muted);
+}
+
+/* Reusable prijelaz za hover kartice */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+}
