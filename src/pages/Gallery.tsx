@@ -5,6 +5,7 @@ import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
 import { GALLERY } from '../data/gallery'
+import { asset } from '../lib/asset'
 
 function Lightbox({
   index,
@@ -71,7 +72,7 @@ function Lightbox({
 
       <motion.img
         key={photo.src}
-        src={photo.src}
+        src={asset(photo.src)}
         alt={photo.alt}
         initial={{ scale: 0.96, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -118,7 +119,7 @@ export default function Gallery() {
                 style={{ backgroundColor: 'var(--surface)' }}
               >
                 <img
-                  src={photo.src}
+                  src={asset(photo.src)}
                   alt={photo.alt}
                   loading="lazy"
                   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"

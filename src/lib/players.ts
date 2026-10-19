@@ -1,4 +1,5 @@
 import type { Player } from '../types'
+import { asset } from './asset'
 
 const DIACRITICS: Record<string, string> = {
   č: 'c', ć: 'c', š: 's', ž: 'z', đ: 'd',
@@ -28,5 +29,5 @@ const PHOTO_VERSION = 2
 
 export function playerPhotoSrc(player: Player): string {
   const base = player.photo ?? `/players/${photoSlug(player.name)}.jpg`
-  return `${base}?v=${PHOTO_VERSION}`
+  return `${asset(base)}?v=${PHOTO_VERSION}`
 }

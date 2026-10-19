@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { asset } from '../lib/asset'
 
 interface CrestProps {
   size?: number
@@ -33,7 +34,7 @@ export default function Crest({ size = 40, className = '' }: CrestProps) {
 
   return (
     <img
-      src="/grb.jpg"
+      src={asset('/grb.jpg')}
       alt="Grb NK Bibinje"
       width={size}
       height={size}

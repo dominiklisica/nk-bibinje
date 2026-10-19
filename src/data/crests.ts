@@ -1,3 +1,4 @@
+import { asset } from '../lib/asset'
 // Grbovi klubova 1. ŽNL Zadarske — izvor: HNS Semafor (COMET).
 // Bibinje koristi službeni grb iz /grb.jpg; ostali su u /public/klubovi/.
 const CREST: Record<string, string> = {
@@ -18,7 +19,8 @@ const CREST: Record<string, string> = {
 }
 
 export function clubCrest(name: string): string | undefined {
-  return CREST[name]
+  const path = CREST[name]
+  return path && asset(path)
 }
 
 /** Inicijali kluba za slučaj da grb nedostaje. */

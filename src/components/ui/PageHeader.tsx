@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
+import { asset } from '../../lib/asset'
 
 /**
  * Standardno zaglavlje stranice (naslov + opcionalni podnaslov) s ulaznom animacijom.
@@ -30,7 +31,7 @@ export default function PageHeader({
       {hasImg && (
         <>
           <img
-            src={bgImage}
+            src={asset(bgImage!)}
             alt=""
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover"

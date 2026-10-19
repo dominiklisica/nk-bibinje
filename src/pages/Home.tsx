@@ -9,6 +9,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import Crest from '../components/Crest'
+import { asset } from '../lib/asset'
 import ClubCrest from '../components/ui/ClubCrest'
 import Countdown from '../components/ui/Countdown'
 import FormBadges from '../components/ui/FormBadges'
@@ -45,7 +46,7 @@ export default function Home() {
         {/* Pozadina: stvarna fotografija momčadi (slavlje) + zeleni overlay radi čitljivosti */}
         <div className="absolute inset-0 -z-10">
           <img
-            src="/slike/naslovna.jpg"
+            src={asset('/slike/naslovna.jpg')}
             alt=""
             aria-hidden="true"
             className="h-full w-full object-cover object-center"
