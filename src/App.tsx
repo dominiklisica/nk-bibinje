@@ -9,6 +9,7 @@ import Stats from './pages/Stats'
 import About from './pages/About'
 import News from './pages/News'
 import Gallery from './pages/Gallery'
+import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/o-klubu" element={<About />} />
         <Route path="/vijesti" element={<News />} />
         <Route path="/galerija" element={<Gallery />} />
+        <Route path="/kontakt" element={<Contact />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

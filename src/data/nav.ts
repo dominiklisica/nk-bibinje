@@ -12,4 +12,5 @@ export const NAV_ITEMS: NavItem[] = [
   { to: '/o-klubu', label: 'O klubu' },
   { to: '/vijesti', label: 'Vijesti' },
   { to: '/galerija', label: 'Galerija' },
+  { to: '/kontakt', label: 'Kontakt' },
 ]
