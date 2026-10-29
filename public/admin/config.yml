@@ -1,0 +1,83 @@
+# Sveltia CMS — uređivanje vijesti. Admin: <adresa stranice>/admin/
+# Spremanje vijesti radi commit na main, a GitHub Actions zatim objavi stranicu.
+backend:
+  name: github
+  repo: dominiklisica/nk-bibinje
+  branch: main
+  commit_messages:
+    create: 'Vijesti: nova objava „{{slug}}"'
+    update: 'Vijesti: izmjena „{{slug}}"'
+    delete: 'Vijesti: brisanje „{{slug}}"'
+
+media_folder: public/slike/vijesti
+public_folder: /slike/vijesti
+
+collections:
+  - name: vijesti
+    label: Vijesti
+    label_singular: Vijest
+    folder: src/content/vijesti
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{date}} · {{title}}'
+    sortable_fields: [date, title, category]
+    fields:
+      - { name: title, label: Naslov, widget: string }
+      - name: date
+        label: Datum
+        widget: datetime
+        format: YYYY-MM-DD
+        time_format: false
+      - name: category
+        label: Kategorija
+        widget: select
+        options: [Najava, Obavijest, Izvještaj]
+      - name: excerpt
+        label: Kratki sažetak
+        widget: text
+        required: false
+      - name: body
+        label: Tekst
+        widget: text
+        hint: Odlomke odvoji praznim retkom.
+      - name: matchId
+        label: Utakmica
+        widget: select
+        required: false
+        hint: Ako vijest govori o utakmici, ispod nje se prikazuje poveznica na detalje utakmice.
+        options:
+              - { label: "19.9.2026. NK Bibinje – NK Polača", value: m01 }
+              - { label: "27.9.2026. NK Škabrnja '91 – NK Bibinje", value: m02 }
+              - { label: "3.10.2026. NK Bibinje – NŠK Zlatna Luka", value: m03 }
+              - { label: "7.10.2026. NŠK Zemunik – NK Bibinje", value: m04 }
+              - { label: "17.10.2026. NK Sabunjar – NK Bibinje", value: m05 }
+              - { label: "21.10.2026. NK Bibinje – NŠK Raštane", value: m06 }
+              - { label: "24.10.2026. NK Bibinje – NK Dragovoljac", value: m07 }
+              - { label: "1.11.2026. NŠK Debeljak – NK Bibinje", value: m08 }
+              - { label: "7.11.2026. NK Bibinje – HNK Velebit (B)", value: m09 }
+              - { label: "14.11.2026. NK Pakoštane – NK Bibinje", value: m10 }
+              - { label: "21.11.2026. NK Bibinje – NŠK Nova Zora", value: m11 }
+              - { label: "28.11.2026. NK Bibinje – NK Abeceda sporta", value: m12 }
+              - { label: "6.12.2026. NK Hajduk (P) – NK Bibinje", value: m13 }
+              - { label: "7.3.2027. NK Polača – NK Bibinje", value: m14 }
+              - { label: "14.3.2027. NK Bibinje – NK Škabrnja '91", value: m15 }
+              - { label: "21.3.2027. NŠK Zlatna Luka – NK Bibinje", value: m16 }
+              - { label: "28.3.2027. NK Bibinje – NŠK Zemunik", value: m17 }
+              - { label: "4.4.2027. NŠK Raštane – NK Bibinje", value: m18 }
+              - { label: "11.4.2027. NK Bibinje – NK Sabunjar", value: m19 }
+              - { label: "18.4.2027. NK Dragovoljac – NK Bibinje", value: m20 }
+              - { label: "25.4.2027. NK Bibinje – NŠK Debeljak", value: m21 }
+              - { label: "2.5.2027. HNK Velebit (B) – NK Bibinje", value: m22 }
+              - { label: "9.5.2027. NK Bibinje – NK Pakoštane", value: m23 }
+              - { label: "16.5.2027. NŠK Nova Zora – NK Bibinje", value: m24 }
+              - { label: "23.5.2027. NK Abeceda sporta – NK Bibinje", value: m25 }
+              - { label: "30.5.2027. NK Bibinje – NK Hajduk (P)", value: m26 }
+      - name: facebook
+        label: Objava s Facebooka
+        widget: boolean
+        required: false
+        default: false
+        hint: Prikazuje poveznicu na službenu Facebook stranicu kluba.
