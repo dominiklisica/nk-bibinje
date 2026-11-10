@@ -1,14 +1,14 @@
 import PageHeader from '../components/ui/PageHeader'
-import SourceTag from '../components/ui/SourceTag'
 import Reveal from '../components/ui/Reveal'
 import FormBadges from '../components/ui/FormBadges'
+import TeamPicker from '../components/ui/TeamPicker'
 import { seasonStats, form, topScorers } from '../lib/stats'
-import { SQUAD } from '../data/squad'
+import { useTeam } from '../hooks/useTeam'
 
 function Tile({ value, label, accent }: { value: string | number; label: string; accent?: boolean }) {
   return (
     <div
-      className="rounded-2xl border border-app p-5"
+      className="tile-hover rounded-2xl border border-app p-5"
       style={{ backgroundColor: 'var(--surface)' }}
     >
       <div
@@ -23,17 +23,20 @@ function Tile({ value, label, accent }: { value: string | number; label: string;
 }
 
 export default function Stats() {
-  const s = seasonStats()
-  const scorers = topScorers(6)
+  const { team } = useTeam()
+  const s = seasonStats(team)
+  const scorers = topScorers(team, 6)
 
   return (
     <div>
       <PageHeader
         title="Statistika"
-        subtitle="Sezonski učinak NK Bibinje."
+        subtitle={`${team.label} NK Bibinje · sezonski učinak.`}
         bgImage="/slike/galerija/slavlje-3.jpg"
         imgPosition="center 12%"
-      />
+      >
+        <TeamPicker className="mt-6" />
+      </PageHeader>
       <Reveal className="mx-auto max-w-7xl space-y-10 px-4 py-10 sm:px-6">
         <section>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
@@ -47,7 +50,7 @@ export default function Stats() {
         </section>
 
         <section className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
+          <div className="tile-hover rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
             <h3 className="font-display text-lg font-bold uppercase">Golovi po utakmici</h3>
             <div className="font-display mt-2 text-5xl font-extrabold" style={{ color: 'var(--club-primary)' }}>
               {s.goalsPerGame.toLocaleString('hr-HR')}
@@ -55,7 +58,7 @@ export default function Stats() {
             <p className="text-muted mt-1 text-sm">prosjek postignutih golova</p>
           </div>
 
-          <div className="rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
+          <div className="tile-hover rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
             <h3 className="font-display text-lg font-bold uppercase">Doma</h3>
             <div className="font-display mt-2 text-3xl font-extrabold tabular-nums">
               {s.home.wins}-{s.home.draws}-{s.home.losses}
@@ -63,7 +66,7 @@ export default function Stats() {
             <p className="text-muted mt-1 text-sm">pobjede – neriješeno – porazi</p>
           </div>
 
-          <div className="rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
+          <div className="tile-hover rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
             <h3 className="font-display text-lg font-bold uppercase">U gostima</h3>
             <div className="font-display mt-2 text-3xl font-extrabold tabular-nums">
               {s.away.wins}-{s.away.draws}-{s.away.losses}
@@ -73,13 +76,13 @@ export default function Stats() {
         </section>
 
         <section className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
+          <div className="tile-hover rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
             <h3 className="mb-4 font-display text-lg font-bold uppercase">Forma</h3>
-            <FormBadges form={form(5)} size={34} />
+            <FormBadges form={form(team, 5)} size={34} />
             <p className="text-muted mt-3 text-sm">posljednje odigrane utakmice (kronološki)</p>
           </div>
 
-          <div className="rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
+          <div className="tile-hover rounded-2xl border border-app p-6" style={{ backgroundColor: 'var(--surface)' }}>
             <h3 className="mb-4 font-display text-lg font-bold uppercase">Najbolji strijelci</h3>
             <div className="space-y-2">
               {scorers.map((p) => (
@@ -121,12 +124,12 @@ export default function Stats() {
                 </tr>
               </thead>
               <tbody>
-                {[...SQUAD]
-                  .sort((a, b) => b.minutes - a.minutes)
+                {[...team.squad]
+                  .sort((a, b) => b.minutes - a.minutes || b.appearances - a.appearances || b.goals - a.goals)
                   .map((p) => {
                     const isGK = p.position === 'GK'
                     return (
-                      <tr key={p.id} className="border-b border-app last:border-0">
+                      <tr key={p.id} className="row-hover border-b border-app last:border-0">
                         <td className="px-3 py-2.5">
                           <span
                             className="inline-grid h-6 w-6 place-items-center rounded font-display text-xs font-bold text-white"
@@ -147,7 +150,9 @@ export default function Stats() {
                           )}
                         </td>
                         <td className="px-3 py-2.5 text-center tabular-nums">{p.appearances}</td>
-                        <td className="px-3 py-2.5 text-center tabular-nums">{p.minutes}</td>
+                        <td className="px-3 py-2.5 text-center tabular-nums">
+                          {team.hasMinutes ? p.minutes : '—'}
+                        </td>
                         <td className="px-3 py-2.5 text-center font-display font-bold tabular-nums">
                           {isGK ? '—' : p.goals}
                         </td>
@@ -165,7 +170,6 @@ export default function Stats() {
           </div>
         </section>
 
-        <SourceTag />
       </Reveal>
     </div>
   )

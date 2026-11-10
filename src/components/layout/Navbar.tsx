@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import { NavLink, Link } from 'react-router-dom'
+import { NavLink, Link, useLocation } from 'react-router-dom'
 import { Menu, X, Moon, Sun } from 'lucide-react'
 import Crest from '../Crest'
+import InstallButton from '../ui/InstallButton'
 import { NAV_ITEMS } from '../../data/nav'
 import { CLUB } from '../../data/club'
 import type { Theme } from '../../hooks/useTheme'
+
+const HERO_ROUTES = ['/', '/utakmice', '/momcad', '/tablica', '/statistika', '/o-klubu', '/vijesti', '/galerija', '/clanarina', '/donacije']
 
 interface NavbarProps {
   theme: Theme
@@ -14,6 +17,9 @@ interface NavbarProps {
 export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  // Stranice sa zelenim zaglavljem (fotografija): prozirna traka tamo koristi bijele naglaske.
+  const { pathname } = useLocation()
+  const onHero = HERO_ROUTES.some((r) => (r === '/' ? pathname === '/' : pathname.startsWith(r)))
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10)
@@ -30,9 +36,9 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   }, [open])
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `px-3 py-2 rounded-md font-display font-semibold uppercase tracking-wide text-sm transition-colors ${
+    `nav-link px-3 py-2 rounded-md font-display font-semibold uppercase tracking-wide text-sm transition-colors ${
       isActive
-        ? 'text-[var(--club-primary)]'
+        ? 'is-active text-[var(--club-primary)]'
         : 'text-[var(--text)] hover:text-[var(--club-primary)]'
     }`
 
@@ -41,19 +47,21 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
       className={`fixed inset-x-0 top-0 z-50 transition-all ${
         scrolled
           ? 'surface/90 backdrop-blur-md border-b border-app shadow-sm'
-          : 'bg-transparent'
+          : `bg-transparent ${onHero ? 'on-hero' : ''}`
       }`}
       style={scrolled ? { backgroundColor: 'color-mix(in srgb, var(--surface) 88%, transparent)' } : undefined}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-        <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          <Crest size={40} />
-          <span className="font-display text-xl font-extrabold uppercase leading-none tracking-wide">
+        <Link to="/" className="brand-hover flex items-center gap-3" onClick={() => setOpen(false)}>
+          <span className="brand-crest inline-flex">
+            <Crest size={40} />
+          </span>
+          <span className="brand-name whitespace-nowrap font-display text-lg font-extrabold uppercase leading-none tracking-wide sm:text-xl">
             {CLUB.name}
           </span>
         </Link>
 
-        <nav className="hidden items-center gap-0.5 lg:flex">
+        <nav className="hidden items-center gap-0.5 xl:flex">
           {NAV_ITEMS.map((item) => (
             <NavLink key={item.to} to={item.to} className={linkClass} end={item.to === '/'}>
               {item.label}
@@ -62,10 +70,11 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <InstallButton />
           <button
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Svijetla tema' : 'Tamna tema'}
-            className="grid h-10 w-10 place-items-center rounded-lg border border-app text-[var(--text)] hover:text-[var(--club-primary)] transition-colors"
+            className="tile-hover grid h-10 w-10 place-items-center rounded-lg border border-app text-[var(--text)] hover:text-[var(--club-primary)]"
           >
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
@@ -73,7 +82,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
             onClick={() => setOpen((o) => !o)}
             aria-label={open ? 'Zatvori izbornik' : 'Otvori izbornik'}
             aria-expanded={open}
-            className="grid h-10 w-10 place-items-center rounded-lg border border-app lg:hidden"
+            className="tile-hover grid h-10 w-10 place-items-center rounded-lg border border-app hover:text-[var(--club-primary)] xl:hidden"
           >
             {open ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -82,7 +91,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
 
       {/* Mobilni izbornik */}
       <div
-        className={`fixed inset-x-0 top-16 z-40 origin-top transition-transform lg:hidden ${
+        className={`fixed inset-x-0 top-16 z-40 origin-top transition-transform xl:hidden ${
           open ? 'translate-y-0' : '-translate-y-[130%]'
         }`}
       >
@@ -100,7 +109,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
                 `block rounded-lg px-4 py-3 font-display font-semibold uppercase tracking-wide ${
                   isActive
                     ? 'bg-[var(--club-primary)] text-white'
-                    : 'text-[var(--text)]'
+                    : 'row-hover text-[var(--text)]'
                 }`
               }
             >

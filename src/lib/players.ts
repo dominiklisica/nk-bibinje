@@ -25,9 +25,9 @@ export function photoSlug(name: string): string {
  */
 // Povećaj kad zamijeniš fotografije — tjera preglednik da učita svježe
 // datoteke umjesto starih iz cachea.
-const PHOTO_VERSION = 2
+const PHOTO_VERSION = 3
 
-export function playerPhotoSrc(player: Player): string {
+export function playerPhotoSrc(player: Pick<Player, 'name' | 'photo'>): string {
   const base = player.photo ?? `/players/${photoSlug(player.name)}.jpg`
   return `${asset(base)}?v=${PHOTO_VERSION}`
 }

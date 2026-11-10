@@ -7,7 +7,7 @@ import { playerPhotoSrc } from '../../lib/players'
  * (/players/<ime-prezime>.jpg). Ako ne postoji, ništa se ne prikazuje
  * pa ostaje placeholder ispod — bez slomljene slike.
  */
-export default function PlayerPhoto({ player }: { player: Player }) {
+export default function PlayerPhoto({ player }: { player: Pick<Player, 'name' | 'photo'> }) {
   const [failed, setFailed] = useState(false)
   if (failed) return null
   return (

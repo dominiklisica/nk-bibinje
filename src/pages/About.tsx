@@ -142,7 +142,7 @@ export default function About() {
                     />
                   </div>
                   <div
-                    className="flex-1 rounded-2xl border border-app p-5"
+                    className="tile-hover flex-1 rounded-2xl border border-app p-5"
                     style={{
                       backgroundColor: 'var(--surface)',
                       borderColor: t.highlight ? 'var(--club-primary)' : 'var(--border)',
@@ -164,7 +164,7 @@ export default function About() {
             {INFO.map((it) => (
               <div
                 key={it.label}
-                className="rounded-2xl border border-app p-5"
+                className="tile-hover rounded-2xl border border-app p-5"
                 style={{ backgroundColor: 'var(--surface)' }}
               >
                 <span

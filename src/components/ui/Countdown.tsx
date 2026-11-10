@@ -32,7 +32,7 @@ export default function Countdown({ date, time }: { date: string; time: string }
   if (t.done) {
     return (
       <div className="font-display text-lg font-bold uppercase text-[var(--club-accent)]">
-        Utakmica je počela
+        Utakmica je u tijeku
       </div>
     )
   }
@@ -42,7 +42,7 @@ export default function Countdown({ date, time }: { date: string; time: string }
       {units.map((u) => (
         <div
           key={u.l}
-          className="min-w-[56px] rounded-lg border border-app px-2 py-2 text-center"
+          className="tile-hover min-w-[56px] rounded-lg border border-app px-2 py-2 text-center"
           style={{ backgroundColor: 'var(--surface-2)' }}
         >
           <div className="font-display text-2xl font-extrabold leading-none tabular-nums">

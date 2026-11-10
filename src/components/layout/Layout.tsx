@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import TeamProvider from '../TeamProvider'
 import { useTheme } from '../../hooks/useTheme'
 
 function ScrollToTop() {
@@ -15,14 +16,16 @@ function ScrollToTop() {
 export default function Layout() {
   const { theme, toggle } = useTheme()
   return (
-    <div className="flex min-h-dvh flex-col">
-      <ScrollToTop />
-      <div className="crest-watermark" aria-hidden="true" />
-      <Navbar theme={theme} toggleTheme={toggle} />
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+    <TeamProvider>
+      <div className="flex min-h-dvh flex-col">
+        <ScrollToTop />
+        <div className="crest-watermark" aria-hidden="true" />
+        <Navbar theme={theme} toggleTheme={toggle} />
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+    </TeamProvider>
   )
 }

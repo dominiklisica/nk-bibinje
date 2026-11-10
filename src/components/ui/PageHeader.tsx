@@ -24,12 +24,13 @@ export default function PageHeader({
 }) {
   const hasImg = !!bgImage
   return (
+    // Bez overflow-hidden na korijenu, da padajući izbornik (children) može izaći ispod zaglavlja.
     <div
-      className="relative overflow-hidden border-b border-app"
+      className="relative z-10 border-b border-app"
       style={hasImg ? undefined : { backgroundColor: 'var(--surface)' }}
     >
       {hasImg && (
-        <>
+        <div className="absolute inset-0 overflow-hidden">
           <img
             src={asset(bgImage!)}
             alt=""
@@ -44,7 +45,7 @@ export default function PageHeader({
                 'linear-gradient(90deg, rgba(10,79,35,0.78), rgba(13,107,45,0.55) 55%, rgba(19,138,60,0.30))',
             }}
           />
-        </>
+        </div>
       )}
       <div
         className={`relative mx-auto flex max-w-7xl flex-col justify-end px-4 pb-12 pt-28 sm:px-6 ${

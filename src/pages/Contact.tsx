@@ -143,7 +143,7 @@ export default function Contact() {
           {INFO.map((it) => (
             <div
               key={it.label}
-              className="rounded-2xl border border-app p-5"
+              className="tile-hover rounded-2xl border border-app p-5"
               style={{ backgroundColor: 'var(--surface)' }}
             >
               <span

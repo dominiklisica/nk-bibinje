@@ -13,9 +13,12 @@ import { asset } from '../lib/asset'
 import ClubCrest from '../components/ui/ClubCrest'
 import Countdown from '../components/ui/Countdown'
 import FormBadges from '../components/ui/FormBadges'
-import SourceTag from '../components/ui/SourceTag'
 import Reveal from '../components/ui/Reveal'
+import TeamPicker from '../components/ui/TeamPicker'
+import InstallButton from '../components/ui/InstallButton'
 import { CLUB } from '../data/club'
+import type { StandingRow } from '../types'
+import { useTeam } from '../hooks/useTeam'
 import {
   nextMatch,
   lastResults,
@@ -24,7 +27,6 @@ import {
   topScorers,
   CLUB_NAME,
 } from '../lib/stats'
-import { STANDINGS } from '../data/standings'
 
 function formatDate(iso: string) {
   const [y, m, d] = iso.split('-')
@@ -33,11 +35,12 @@ function formatDate(iso: string) {
 }
 
 export default function Home() {
-  const next = nextMatch()
-  const results = lastResults(5)
-  const myForm = form(5)
-  const standing = bibinjeStanding()
-  const scorers = topScorers(5)
+  const { team } = useTeam()
+  const next = nextMatch(team)
+  const results = lastResults(team, 5)
+  const myForm = form(team, 5)
+  const standing = bibinjeStanding(team)
+  const scorers = topScorers(team, 5)
 
   return (
     <div>
@@ -78,14 +81,14 @@ export default function Home() {
               <Crest size={120} />
             </motion.div>
 
-            <motion.span
+            <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-sm font-semibold uppercase tracking-wider backdrop-blur-sm"
+              className="relative z-20 mt-6 flex w-full justify-center"
             >
-              <Trophy size={14} /> {CLUB.league} · {CLUB.season}
-            </motion.span>
+              <TeamPicker />
+            </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 16 }}
@@ -124,6 +127,7 @@ export default function Home() {
               >
                 Prvenstvena tablica
               </Link>
+              <InstallButton variant="hero" />
             </motion.div>
           </div>
         </div>
@@ -136,7 +140,7 @@ export default function Home() {
             <section>
               <SectionTitle icon={<CalendarClock size={18} />} title="Sljedeća utakmica" tone="red" />
               <div
-                className="overflow-hidden rounded-2xl border border-app"
+                className="tile-hover overflow-hidden rounded-2xl border border-app"
                 style={{ backgroundColor: 'var(--surface)' }}
               >
                 <div className="grid gap-6 p-6 sm:p-8 md:grid-cols-[1fr_auto] md:items-center">
@@ -167,9 +171,6 @@ export default function Home() {
                     <Countdown date={next.date} time={next.time} />
                   </div>
                 </div>
-              </div>
-              <div className="mt-3">
-                <SourceTag />
               </div>
             </section>
           </Reveal>
@@ -216,9 +217,6 @@ export default function Home() {
                   </Link>
                 ))}
             </div>
-            <div className="mt-3">
-              <SourceTag />
-            </div>
           </section>
         </Reveal>
 
@@ -250,12 +248,12 @@ export default function Home() {
                     </tr>
                   </thead>
                   <tbody>
-                    {miniTableRows(standing?.position).map((row) => {
+                    {miniTableRows(team.standings, standing?.position).map((row) => {
                       const mine = row.club === CLUB_NAME
                       return (
                         <tr
                           key={row.position}
-                          className="border-b border-app last:border-0"
+                          className="row-hover border-b border-app last:border-0"
                           style={mine ? { backgroundColor: 'color-mix(in srgb, var(--club-primary) 12%, transparent)' } : undefined}
                         >
                           <td className="px-3 py-2 font-display font-bold">{row.position}</td>
@@ -273,15 +271,20 @@ export default function Home() {
                           </td>
                           <td className="px-3 py-2 text-center font-display font-extrabold tabular-nums">
                             {row.points}
+                            {row.deduction ? (
+                              <sup
+                                className="ml-0.5 text-[10px] font-bold text-[var(--club-red)]"
+                                title={`Oduzeto bodova: ${row.deduction}`}
+                              >
+                                −{row.deduction}
+                              </sup>
+                            ) : null}
                           </td>
                         </tr>
                       )
                     })}
                   </tbody>
                 </table>
-              </div>
-              <div className="mt-3">
-                <SourceTag />
               </div>
             </section>
           </Reveal>
@@ -294,7 +297,7 @@ export default function Home() {
                 style={{ backgroundColor: 'var(--surface)' }}
               >
                 {scorers.map((p, i) => (
-                  <div key={p.id} className="flex items-center gap-4 px-4 py-3">
+                  <div key={p.id} className="row-hover flex items-center gap-4 px-4 py-3">
                     <span className="text-muted w-5 text-center font-display font-bold">
                       {i + 1}
                     </span>
@@ -309,9 +312,6 @@ export default function Home() {
                     <span className="text-muted text-xs">gol.</span>
                   </div>
                 ))}
-              </div>
-              <div className="mt-3">
-                <SourceTag />
               </div>
             </section>
           </Reveal>
@@ -374,8 +374,8 @@ function OutcomeChip({ outcome }: { outcome: 'W' | 'D' | 'L' }) {
 }
 
 /** Nekoliko redova tablice oko pozicije Bibinja. */
-function miniTableRows(myPos?: number) {
-  if (!myPos) return STANDINGS.slice(0, 6)
-  const start = Math.max(0, Math.min(myPos - 3, STANDINGS.length - 6))
-  return STANDINGS.slice(start, start + 6)
+function miniTableRows(standings: StandingRow[], myPos?: number) {
+  if (!myPos) return standings.slice(0, 6)
+  const start = Math.max(0, Math.min(myPos - 3, standings.length - 6))
+  return standings.slice(start, start + 6)
 }

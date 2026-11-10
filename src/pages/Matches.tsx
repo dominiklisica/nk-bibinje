@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CalendarClock, MapPin, Trophy, ChevronRight } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
-import SourceTag from '../components/ui/SourceTag'
 import Reveal from '../components/ui/Reveal'
 import ClubCrest from '../components/ui/ClubCrest'
-import { bibinjeMatches, perspective, CLUB_NAME } from '../lib/stats'
+import TeamPicker from '../components/ui/TeamPicker'
+import { useTeam } from '../hooks/useTeam'
+import { bibinjeMatches, perspective, matchState, MATCH_STATE_LABEL, CLUB_NAME } from '../lib/stats'
 import type { Match } from '../types'
 
 type Filter = 'all' | 'finished' | 'upcoming'
@@ -31,6 +32,7 @@ function TeamSide({ name, right = false }: { name: string; right?: boolean }) {
 function MatchRow({ match }: { match: Match }) {
   const p = perspective(match)
   const finished = match.status === 'finished'
+  const state = matchState(match)
   const body = (
     <>
       <div className="text-muted mb-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
@@ -52,6 +54,14 @@ function MatchRow({ match }: { match: Match }) {
           {finished ? (
             <span className="font-display text-2xl font-extrabold tabular-nums">
               {match.homeScore} : {match.awayScore}
+            </span>
+          ) : state !== 'upcoming' && state !== 'finished' ? (
+            <span
+              className={`rounded-md border border-app px-3 py-1 font-display text-sm font-bold uppercase ${
+                state === 'postponed' ? 'text-[var(--club-red)]' : 'text-[var(--club-primary)]'
+              }`}
+            >
+              {MATCH_STATE_LABEL[state]}
             </span>
           ) : (
             <span className="rounded-md border border-app px-3 py-1 font-display text-sm font-bold text-muted">
@@ -91,12 +101,13 @@ function MatchRow({ match }: { match: Match }) {
 }
 
 export default function Matches() {
+  const { team } = useTeam()
   const [filter, setFilter] = useState<Filter>('all')
-  // Odigrane od najnovije prema starijima, zatim nadolazeće kronološki.
-  const all = bibinjeMatches()
+  // Odigrane od najnovije prema starijima, zatim nadolazeće (s odgođenima) kronološki.
+  const all = bibinjeMatches(team)
   const groups: { key: Exclude<Filter, 'all'>; title: string; matches: Match[] }[] = [
     { key: 'finished', title: 'Odigrane', matches: all.filter((m) => m.status === 'finished').reverse() },
-    { key: 'upcoming', title: 'Nadolazeće', matches: all.filter((m) => m.status === 'upcoming') },
+    { key: 'upcoming', title: 'Nadolazeće', matches: all.filter((m) => m.status !== 'finished') },
   ]
   const shown = groups.filter(
     (g) => g.matches.length > 0 && (filter === 'all' || filter === g.key),
@@ -112,11 +123,13 @@ export default function Matches() {
     <div>
       <PageHeader
         title="Utakmice"
-        subtitle="Raspored i rezultati NK Bibinje u sezoni 2026/27."
+        subtitle={`${team.label} NK Bibinje · raspored i rezultati u sezoni 2026/27.`}
         bgImage="/slike/utakmice.jpg"
         imgPosition="center 7%"
         tall
-      />
+      >
+        <TeamPicker className="mt-6" />
+      </PageHeader>
       <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
         <div className="mb-6 inline-flex rounded-full border border-app p-1" style={{ backgroundColor: 'var(--surface)' }}>
           {filters.map((f) => (
@@ -152,9 +165,6 @@ export default function Matches() {
           ))}
         </div>
 
-        <div className="mt-6">
-          <SourceTag />
-        </div>
       </div>
     </div>
   )

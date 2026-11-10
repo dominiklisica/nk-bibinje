@@ -28,3 +28,6 @@ dist-ssr
 /*.jpeg
 /*.png
 /*.webp
+
+# Paket za web hosting (npm run build pa zip mape dist/)
+/*.zip

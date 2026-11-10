@@ -1,0 +1,17 @@
+{
+  "name": "NK Bibinje",
+  "short_name": "NK Bibinje",
+  "description": "Rezultati, raspored, tablica, momčad, članarina i donacije NK Bibinje.",
+  "lang": "hr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#138a3c",
+  "background_color": "#08130c",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

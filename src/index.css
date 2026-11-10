@@ -112,10 +112,115 @@
   mix-blend-mode: screen;
 }
 
-/* Reusable prijelaz za hover kartice */
-.card-hover {
+/* Grb preko uvećane kartice igrača. Svijetla tema: "multiply" (bijela podloga grba nestaje);
+   tamna tema: invertiran uz "screen" (crna podloga nestaje, linije su svijetle). */
+.crest-overlay {
+  filter: grayscale(1) contrast(1.3);
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+}
+:root.dark .crest-overlay {
+  filter: grayscale(1) contrast(1.3) invert(1);
+  opacity: 0.07;
+  mix-blend-mode: screen;
+}
+
+/* ===== Hover efekti (samo uređaji s mišem; bez pokreta uz "smanjeno kretanje") =====
+   card-hover — kartice (utakmice, igrači, vijesti): podigne se i malo uveća
+   tile-hover — pločice i okviri sa statistikom: blago uvećanje
+   row-hover  — retci tablica i popisa: zelenkasta pozadina i podebljan tekst */
+/* Miješane boje su u varijablama: LightningCSS bi color-mix(var(...)) u pravilu
+   zamijenio punom bojom, a vrijednosti varijabli ostavlja netaknute. */
+:root {
+  --hover-border: color-mix(in srgb, var(--club-primary) 50%, var(--border));
+  --hover-tint: color-mix(in srgb, var(--club-primary) 10%, transparent);
+  --hover-shadow: 0 14px 30px -12px rgb(0 0 0 / 0.35);
+}
+.card-hover,
+.tile-hover {
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
-.card-hover:hover {
-  transform: translateY(-4px);
+.row-hover {
+  transition: background-color 0.2s ease, text-shadow 0.2s ease, box-shadow 0.2s ease;
+}
+@media (hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: var(--hover-border);
+    box-shadow: var(--hover-shadow);
+  }
+  .tile-hover:hover {
+    transform: scale(1.03);
+    border-color: var(--hover-border);
+    box-shadow: var(--hover-shadow);
+  }
+  /* Podebljanje sjenom teksta, da se redak ne pomiče kao kod promjene debljine fonta. */
+  .row-hover:hover {
+    background-color: var(--hover-tint);
+    text-shadow: 0 0 0.6px currentColor, 0 0 0.6px currentColor;
+    box-shadow: inset 3px 0 0 var(--club-primary);
+  }
+}
+/* Izbornik: zelena crta ispod poveznice raste od sredine; aktivna stranica je ima stalno. */
+.nav-link {
+  position: relative;
+  display: inline-block;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0.75rem;
+  right: 0.75rem;
+  bottom: 0.2rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--club-primary);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+}
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+/* Na vrhu stranice sa zelenom fotografijom zelena se ne bi vidjela — naglasci su bijeli. */
+.on-hero .nav-link.is-active,
+.on-hero .nav-link:hover,
+.on-hero .brand-hover:hover .brand-name {
+  color: #fff;
+}
+.on-hero .nav-link::after {
+  background: #fff;
+}
+
+/* Znak NK Bibinje u izborniku: grb se malo uveća i zakrene, naziv postane zelen. */
+.brand-crest {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.brand-name {
+  transition: color 0.2s ease, letter-spacing 0.25s ease;
+}
+
+@media (hover: hover) {
+  .nav-link:hover {
+    transform: translateY(-1px);
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+  .brand-hover:hover .brand-crest {
+    transform: scale(1.12) rotate(-8deg);
+  }
+  .brand-hover:hover .brand-name {
+    color: var(--club-primary);
+    letter-spacing: 0.06em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-hover:hover,
+  .tile-hover:hover,
+  .nav-link:hover,
+  .brand-hover:hover .brand-crest {
+    transform: none;
+  }
 }
