@@ -5,6 +5,7 @@ import { backend } from '../../lib/backend'
 import { DEMO_ADMIN, DEMO_PARENT } from '../../lib/backend/demo'
 import { CLUB } from '../../data/club'
 import { WEB3FORMS_ACCESS_KEY } from '../../data/contact'
+import { savePendingJoin } from '../../lib/pendingJoin'
 
 const field =
   'w-full min-w-0 rounded-xl border border-app bg-transparent px-4 py-2.5 outline-none focus:border-[var(--club-primary)]'
@@ -51,6 +52,7 @@ export default function LoginCard({ intro, parent = false }: { intro: string; pa
     if (withNames && names.parent.split(' ').length < 2) return fail('Upišite ime i prezime roditelja.')
     if (!/^\S+@\S+\.\S+$/.test(mail)) return fail('Upišite ispravnu e-mail adresu.')
     setState('sending')
+    if (withNames) savePendingJoin({ email: mail, child_name: names.child, parent_name: names.parent })
     try {
       const { sent } = await backend.signIn(mail, withNames ? { child_name: names.child, parent_name: names.parent } : undefined)
       if (withNames && !demo) await notifyClub(names.child, names.parent, mail)

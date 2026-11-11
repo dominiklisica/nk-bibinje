@@ -39,6 +39,18 @@ export interface Donation {
 
 export type DonationInput = Omit<Donation, 'id'>
 
+/** Zahtjev roditelja za upis djeteta (šalje se nakon prijave, klub ga potvrđuje). */
+export interface JoinRequest {
+  id: string
+  email: string
+  child_name: string
+  parent_name: string
+  status: 'novo' | 'odobreno' | 'odbijeno'
+  created_at: string
+}
+
+export type JoinRequestInput = Pick<JoinRequest, 'child_name' | 'parent_name'>
+
 export interface SessionUser {
   email: string
 }
@@ -64,4 +76,10 @@ export interface Backend {
   donations(): Promise<Donation[]>
   addDonations(d: DonationInput[]): Promise<{ added: number; skipped: number }>
   deleteDonation(id: string): Promise<void>
+
+  /** Prijavljeni roditelj šalje zahtjev (s e-mailom kojim je prijavljen); isti otvoreni zahtjev se ne ponavlja. */
+  requestJoin(r: JoinRequestInput): Promise<void>
+  /** Administrator: svi zahtjevi; roditelj: samo svoji. */
+  joinRequests(): Promise<JoinRequest[]>
+  setJoinRequestStatus(id: string, status: JoinRequest['status']): Promise<void>
 }

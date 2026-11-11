@@ -100,5 +100,7 @@ create policy payments_guardian on public.payments for select using (public.is_g
 drop policy if exists donations_admin on public.donations;
 create policy donations_admin on public.donations for all using (public.is_admin()) with check (public.is_admin());
 
+-- Zahtjevi roditelja za upis djeteta: vidi 02-zahtjevi.sql (pokrenuti i nju)
+
 -- Prvi administrator (zamijeniti e-mailom tajnika/blagajnika i pokrenuti):
 -- insert into public.admins (email) values ('tajnik@primjer.hr');

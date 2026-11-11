@@ -1,9 +1,9 @@
 import { useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Download, FileUp, LogOut, Pencil, Plus, Trash2, X } from 'lucide-react'
+import { Check, Download, FileUp, LogOut, Pencil, Plus, Trash2, X } from 'lucide-react'
 import LoginCard from '../components/ui/LoginCard'
-import { backend, type Donation, type Member, type MemberInput, type Payment } from '../lib/backend'
+import { backend, type Donation, type JoinRequest, type Member, type MemberInput, type Payment } from '../lib/backend'
 import { resetDemo } from '../lib/backend/demo'
 import { useSession } from '../hooks/useSession'
 import { TEAMS, getTeam, type TeamKey } from '../data/teams'
@@ -12,7 +12,7 @@ import { currentPeriod, feeFor, monthName, monthShort } from '../lib/membership'
 import { formatEur } from '../lib/hub3'
 import { matchLines, parseStatement, type MatchedLine } from '../lib/statement'
 
-type Tab = 'uplate' | 'clanovi' | 'izvod' | 'donacije'
+type Tab = 'zahtjevi' | 'uplate' | 'clanovi' | 'izvod' | 'donacije'
 const today = () => new Date().toISOString().slice(0, 10)
 const fmtDate = (iso: string) => iso.split('-').reverse().join('.') + '.'
 const fullName = (m: Member) => `${m.last_name} ${m.first_name}`
@@ -30,9 +30,11 @@ function useData(email: string | undefined, enabled: boolean) {
   const members = useQuery({ queryKey: ['admin', 'members', email], queryFn: backend.members, enabled })
   const payments = useQuery({ queryKey: ['admin', 'payments', email], queryFn: backend.payments, enabled })
   const donations = useQuery({ queryKey: ['admin', 'donations', email], queryFn: backend.donations, enabled })
+  // Zasebno: ako tablica zahtjeva još ne postoji (SQL nije pokrenut), ostatak evidencije i dalje radi.
+  const requests = useQuery({ queryKey: ['admin', 'requests', email], queryFn: backend.joinRequests, enabled, retry: false })
   const qc = useQueryClient()
   const refresh = () => qc.invalidateQueries()
-  return { members, payments, donations, refresh }
+  return { members, payments, donations, requests, refresh }
 }
 
 /* ---------------- Uplate: tablica tko je platio koji mjesec ---------------- */
@@ -558,9 +560,154 @@ function DonationsTab({ donations, refresh }: { donations: Donation[]; refresh: 
   )
 }
 
+/* ---------------- Zahtjevi roditelja za upis ---------------- */
+
+const norm = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim()
+
+function RequestRow({ r, members, refresh }: { r: JoinRequest; members: Member[]; refresh: () => void }) {
+  const parts = r.child_name.trim().split(/\s+/)
+  const [first, setFirst] = useState(parts[0] ?? '')
+  const [last, setLast] = useState(parts.slice(1).join(' '))
+  const [team, setTeam] = useState<TeamKey>('pioniri')
+  const [year, setYear] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  // Dijete možda već postoji (npr. drugi roditelj) — tada se samo doda e-mail roditelja.
+  const existing = members.find(
+    (m) => norm(`${m.first_name} ${m.last_name}`) === norm(r.child_name) || norm(`${m.last_name} ${m.first_name}`) === norm(r.child_name),
+  )
+
+  const run = async (fn: () => Promise<void>) => {
+    setBusy(true)
+    setError('')
+    try {
+      await fn()
+      refresh()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Spremanje nije uspjelo.')
+      setBusy(false)
+    }
+  }
+  const approve = () =>
+    run(async () => {
+      if (!first.trim() || !last.trim()) throw new Error('Upišite ime i prezime djeteta.')
+      await backend.saveMember({
+        team_key: team,
+        first_name: first.trim(),
+        last_name: last.trim(),
+        birth_year: Number(year) || null,
+        active: true,
+        guardians: [r.email],
+      })
+      await backend.setJoinRequestStatus(r.id, 'odobreno')
+    })
+  const link = (m: Member) =>
+    run(async () => {
+      await backend.saveMember({
+        id: m.id,
+        team_key: m.team_key,
+        first_name: m.first_name,
+        last_name: m.last_name,
+        birth_year: m.birth_year,
+        active: m.active,
+        guardians: [...m.guardians, r.email],
+      })
+      await backend.setJoinRequestStatus(r.id, 'odobreno')
+    })
+  const reject = () => {
+    if (!window.confirm(`Odbiti zahtjev za ${r.child_name}?`)) return
+    run(() => backend.setJoinRequestStatus(r.id, 'odbijeno'))
+  }
+  const input = 'w-full rounded-lg border border-app bg-transparent px-3 py-2'
+
+  return (
+    <Panel>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div>
+          <div className="font-display text-lg font-bold">{r.child_name}</div>
+          <div className="text-muted text-sm">
+            Roditelj: <b className="text-[var(--text)]">{r.parent_name}</b> · {r.email}
+          </div>
+        </div>
+        <span className="text-muted text-xs">{fmtDate(r.created_at.slice(0, 10))}</span>
+      </div>
+      {existing && (
+        <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-dashed border-app p-3 text-sm">
+          <span>
+            Već postoji član <b>{existing.first_name} {existing.last_name}</b> ({getTeam(existing.team_key)?.label}, br. {existing.member_no}).
+          </span>
+          <button type="button" disabled={busy} onClick={() => link(existing)} className="rounded-lg bg-[var(--club-primary)] px-3 py-1.5 font-semibold text-white disabled:opacity-60">
+            Poveži roditelja s njim
+          </button>
+        </div>
+      )}
+      <div className="mt-3 grid gap-2 sm:grid-cols-4">
+        <label className="text-sm">
+          Ime
+          <input className={input} value={first} onChange={(e) => setFirst(e.target.value)} />
+        </label>
+        <label className="text-sm">
+          Prezime
+          <input className={input} value={last} onChange={(e) => setLast(e.target.value)} />
+        </label>
+        <label className="text-sm">
+          Ekipa
+          <select className={`${input} bg-[var(--surface)]`} value={team} onChange={(e) => setTeam(e.target.value as TeamKey)}>
+            {TEAMS.map((t) => (
+              <option key={t.key} value={t.key}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="text-sm">
+          Godište
+          <input className={input} inputMode="numeric" value={year} onChange={(e) => setYear(e.target.value.replace(/\D/g, '').slice(0, 4))} />
+        </label>
+      </div>
+      {error && <p className="mt-2 text-sm text-[var(--club-red)]">{error}</p>}
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button type="button" disabled={busy} onClick={approve} className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--club-primary)] px-4 py-2 font-semibold text-white disabled:opacity-60">
+          <Check size={16} /> Dodaj kao novog člana
+        </button>
+        <button type="button" disabled={busy} onClick={reject} className="tile-hover rounded-lg border border-app px-4 py-2 text-[var(--club-red)] disabled:opacity-60">
+          Odbij
+        </button>
+      </div>
+    </Panel>
+  )
+}
+
+function RequestsTab({ requests, members, refresh }: { requests: JoinRequest[]; members: Member[]; refresh: () => void }) {
+  const open = requests.filter((r) => r.status === 'novo')
+  const done = requests.filter((r) => r.status !== 'novo').slice(0, 20)
+  return (
+    <div className="space-y-4">
+      {open.length === 0 ? (
+        <p className="text-muted">Nema novih zahtjeva. Kad se roditelj prijavi i upiše ime djeteta, zahtjev se pojavi ovdje.</p>
+      ) : (
+        open.map((r) => <RequestRow key={r.id} r={r} members={members} refresh={refresh} />)
+      )}
+      {done.length > 0 && (
+        <div className="text-muted text-sm">
+          <div className="mb-1 font-semibold">Riješeni zahtjevi</div>
+          <ul className="space-y-0.5">
+            {done.map((r) => (
+              <li key={r.id}>
+                {r.child_name} — {r.parent_name} ({r.email}) · {r.status === 'odobreno' ? 'dodan' : 'odbijen'}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ---------------- Stranica ---------------- */
 
 const TABS: { key: Tab; label: string }[] = [
+  { key: 'zahtjevi', label: 'Zahtjevi' },
   { key: 'uplate', label: 'Uplate' },
   { key: 'clanovi', label: 'Članovi' },
   { key: 'izvod', label: 'Uvoz izvoda' },
@@ -569,8 +716,11 @@ const TABS: { key: Tab; label: string }[] = [
 
 export default function ClubAdmin() {
   const { user, isAdmin, loading } = useSession()
-  const [tab, setTab] = useState<Tab>('uplate')
+  const [chosenTab, setTab] = useState<Tab | null>(null)
   const data = useData(user?.email, !!user && isAdmin)
+  const openRequests = (data.requests.data ?? []).filter((r) => r.status === 'novo').length
+  // Ako ima novih zahtjeva, prvo se otvara ta kartica; inače Uplate.
+  const tab: Tab = chosenTab ?? (openRequests > 0 ? 'zahtjevi' : 'uplate')
 
   return (
     <div className="mx-auto max-w-7xl px-4 pb-16 pt-24 sm:px-6">
@@ -629,6 +779,9 @@ export default function ClubAdmin() {
                 }`}
               >
                 {t.label}
+                {t.key === 'zahtjevi' && openRequests > 0 && (
+                  <span className="ml-1.5 rounded-full bg-[var(--club-red)] px-1.5 py-0.5 text-xs text-white">{openRequests}</span>
+                )}
               </button>
             ))}
           </div>
@@ -636,6 +789,14 @@ export default function ClubAdmin() {
             <p className="text-muted">Učitavanje…</p>
           ) : data.members.error || data.payments.error || data.donations.error ? (
             <p className="text-[var(--club-red)]">Podaci se nisu mogli učitati.</p>
+          ) : tab === 'zahtjevi' ? (
+            data.requests.error ? (
+              <p className="text-[var(--club-red)]">
+                Zahtjevi se nisu mogli učitati — u Supabase SQL editoru treba pokrenuti datoteku supabase/02-zahtjevi.sql.
+              </p>
+            ) : (
+              <RequestsTab requests={data.requests.data ?? []} members={data.members.data ?? []} refresh={data.refresh} />
+            )
           ) : tab === 'uplate' ? (
             <PaymentsTab members={data.members.data ?? []} payments={data.payments.data ?? []} refresh={data.refresh} />
           ) : tab === 'clanovi' ? (

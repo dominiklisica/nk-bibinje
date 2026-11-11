@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
-import { Check, LogOut, ShieldCheck } from 'lucide-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { Check, Hourglass, LogOut, ShieldCheck, UserPlus } from 'lucide-react'
+import { clearPendingJoin, readPendingJoin } from '../lib/pendingJoin'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
 import Hub3Barcode from '../components/ui/Hub3Barcode'
@@ -94,6 +95,103 @@ function ChildCard({ member, all, payments }: { member: Member; all: Member[]; p
   )
 }
 
+/** Zahtjevi koje je roditelj poslao, a klub ih još nije potvrdio, i obrazac za još jedno dijete. */
+function JoinRequests({ email, hasChildren }: { email: string; hasChildren: boolean }) {
+  const qc = useQueryClient()
+  // Zahtjev s obrasca za prijavu šalje se čim se roditelj prijavi poveznicom iz e-maila,
+  // pa se tek onda učitaju njegovi zahtjevi (bez utrke između slanja i čitanja).
+  const requests = useQuery({
+    queryKey: ['join-requests', email],
+    queryFn: async () => {
+      const pending = readPendingJoin(email)
+      if (pending) {
+        await backend.requestJoin({ child_name: pending.child_name, parent_name: pending.parent_name })
+        clearPendingJoin()
+      }
+      return backend.joinRequests()
+    },
+  })
+  const [open, setOpen] = useState(false)
+  const [child, setChild] = useState('')
+  const [parent, setParent] = useState('')
+  const [error, setError] = useState('')
+
+  const submit = async () => {
+    const c = child.trim().replace(/\s+/g, ' ')
+    const p = parent.trim().replace(/\s+/g, ' ')
+    if (c.split(' ').length < 2) return setError('Upišite ime i prezime djeteta.')
+    if (p.split(' ').length < 2) return setError('Upišite svoje ime i prezime.')
+    try {
+      await backend.requestJoin({ child_name: c, parent_name: p })
+      setOpen(false)
+      setChild('')
+      setError('')
+      qc.invalidateQueries({ queryKey: ['join-requests', email] })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Slanje nije uspjelo.')
+    }
+  }
+
+  const waiting = (requests.data ?? []).filter((r) => r.status === 'novo' && r.email === email)
+  const field = 'w-full min-w-0 rounded-xl border border-app bg-transparent px-4 py-2.5 outline-none focus:border-[var(--club-primary)]'
+
+  return (
+    <>
+      {waiting.map((r) => (
+        <div key={r.id} className="flex items-start gap-3 rounded-2xl border border-dashed border-app p-5">
+          <Hourglass size={20} className="mt-0.5 shrink-0 text-[var(--club-primary)]" />
+          <div>
+            <div className="font-display text-lg font-bold">{r.child_name}</div>
+            <p className="text-muted text-sm">
+              Zahtjev za upis poslan je klubu. Kad ga klub potvrdi, ovdje ćete vidjeti članarinu i barkod za uplatu.
+            </p>
+          </div>
+        </div>
+      ))}
+      {!hasChildren && waiting.length === 0 && !open && (
+        <div className="rounded-2xl border border-dashed border-app p-6">
+          <h2 className="font-display text-xl font-bold uppercase">Nema povezane djece</h2>
+          <p className="text-muted mt-1 text-sm">
+            Uz e-mail <b>{email}</b> klub još nije upisao nijedno dijete. Pošaljite zahtjev za upis i klub će ga potvrditi.
+          </p>
+        </div>
+      )}
+      {open ? (
+        <div className="rounded-2xl border border-app p-5" style={{ backgroundColor: 'var(--surface)' }}>
+          <h2 className="font-display text-lg font-bold uppercase">Zahtjev za upis djeteta</h2>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2">
+            <label className="text-sm">
+              Ime i prezime djeteta
+              <input value={child} onChange={(e) => setChild(e.target.value)} className={`${field} mt-1`} />
+            </label>
+            <label className="text-sm">
+              Ime i prezime roditelja
+              <input value={parent} onChange={(e) => setParent(e.target.value)} autoComplete="name" className={`${field} mt-1`} />
+            </label>
+          </div>
+          {error && <p className="mt-2 text-sm text-[var(--club-red)]">{error}</p>}
+          <div className="mt-3 flex gap-2">
+            <button type="button" onClick={submit} className="rounded-xl bg-[var(--club-primary)] px-5 py-2 font-semibold text-white">
+              Pošalji klubu
+            </button>
+            <button type="button" onClick={() => setOpen(false)} className="tile-hover rounded-xl border border-app px-4 py-2">
+              Odustani
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="tile-hover inline-flex items-center gap-1.5 rounded-lg border border-app px-4 py-2 text-sm font-semibold"
+        >
+          <UserPlus size={16} /> {hasChildren || waiting.length ? 'Prijavi još jedno dijete' : 'Pošalji zahtjev za upis'}
+        </button>
+      )}
+    </>
+  )
+}
+
 export default function Membership() {
   const { user, isAdmin, loading } = useSession()
   const members = useQuery({ queryKey: ['members', user?.email], queryFn: backend.members, enabled: !!user })
@@ -146,19 +244,15 @@ export default function Membership() {
               <p className="text-muted">Učitavanje…</p>
             ) : members.error || payments.error ? (
               <p className="text-[var(--club-red)]">Podaci se nisu mogli učitati. Pokušajte ponovno kasnije.</p>
-            ) : children.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-app p-6">
-                <h2 className="font-display text-xl font-bold uppercase">Nema povezane djece</h2>
-                <p className="text-muted mt-1 text-sm">
-                  Uz e-mail <b>{user.email}</b> klub još nije upisao nijedno dijete. Javite se treneru ili tajniku kluba da vas povežu.
-                </p>
-              </div>
             ) : (
-              children.map((m, i) => (
-                <Reveal key={m.id} delay={Math.min(i * 0.05, 0.2)}>
-                  <ChildCard member={m} all={all} payments={payments.data ?? []} />
-                </Reveal>
-              ))
+              <>
+                {children.map((m, i) => (
+                  <Reveal key={m.id} delay={Math.min(i * 0.05, 0.2)}>
+                    <ChildCard member={m} all={all} payments={payments.data ?? []} />
+                  </Reveal>
+                ))}
+                <JoinRequests email={user.email} hasChildren={children.length > 0} />
+              </>
             )}
           </>
         )}

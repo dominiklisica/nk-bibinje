@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
-import type { Backend, Donation, Member, Payment } from './types'
+import type { Backend, Donation, JoinRequest, Member, Payment } from './types'
 
 type Row = Omit<Member, 'guardians'> & { member_guardians?: { email: string }[] }
 
@@ -108,6 +108,22 @@ export function supabaseBackend(url: string, key: string): Backend {
     },
     async deleteDonation(id) {
       fail((await db.from('donations').delete().eq('id', id)).error)
+    },
+
+    async requestJoin(r) {
+      const { data } = await db.auth.getSession()
+      const email = data.session?.user.email?.toLowerCase()
+      if (!email) throw new Error('Niste prijavljeni.')
+      const { error } = await db.from('join_requests').insert({ ...r, email })
+      if (error && error.code !== '23505') throw new Error(error.message) // 23505 = zahtjev već postoji
+    },
+    async joinRequests() {
+      const { data, error } = await db.from('join_requests').select('*').order('created_at', { ascending: false })
+      fail(error)
+      return (data ?? []) as JoinRequest[]
+    },
+    async setJoinRequestStatus(id, status) {
+      fail((await db.from('join_requests').update({ status }).eq('id', id)).error)
     },
   }
 }

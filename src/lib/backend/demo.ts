@@ -1,4 +1,4 @@
-import type { Backend, Donation, Member, Payment, SessionUser } from './types'
+import type { Backend, Donation, JoinRequest, Member, Payment, SessionUser } from './types'
 
 // Demo način: izmišljeni podaci spremljeni samo u ovom pregledniku (localStorage).
 // Služi za isprobavanje dok Supabase nije postavljen. Prijava bez e-maila:
@@ -13,6 +13,7 @@ interface Store {
   members: Member[]
   payments: Payment[]
   donations: Donation[]
+  requests?: JoinRequest[]
 }
 
 const uid = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36)
@@ -184,6 +185,22 @@ export function demoBackend(): Backend {
     async deleteDonation(id) {
       requireAdmin()
       store.donations = store.donations.filter((d) => d.id !== id)
+      save()
+    },
+
+    async requestJoin(r) {
+      if (!user) throw new Error('Niste prijavljeni.')
+      const list = (store.requests ??= [])
+      const dup = list.some(
+        (x) => x.status === 'novo' && x.email === user!.email && x.child_name.toLowerCase() === r.child_name.toLowerCase(),
+      )
+      if (!dup) list.unshift({ ...r, id: uid(), email: user.email, status: 'novo', created_at: new Date().toISOString() })
+      save()
+    },
+    joinRequests: () => delay((store.requests ?? []).filter((x) => isAdmin() || x.email === user?.email)),
+    async setJoinRequestStatus(id, status) {
+      requireAdmin()
+      store.requests = (store.requests ?? []).map((x) => (x.id === id ? { ...x, status } : x))
       save()
     },
   }
