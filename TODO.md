@@ -3,6 +3,7 @@
 ## 1. Slanje e-maila za prijavu — ✅ gotovo (11. 11. 2026.)
 Brevo SMTP spojen u Supabase (limit 30 e-mailova/sat), e-mailovi za prijavu na hrvatskom.
 - [ ] kasnije: zamijeniti privremenog pošiljatelja (osobni Gmail) adresom kluba
+- [ ] kasnije: Web3Forms ključ (kontakt obrazac + obavijest o prijavi roditelja) zasad šalje na osobni e-mail — prebaciti na e-mail kluba (novi ključ na web3forms.com → `src/data/contact.ts`)
 
 ## 2. Podaci kluba za uplate → `src/data/payments.ts`
 - [ ] naziv, adresa i IBAN kluba (točno kako idu na uplatnicu)
