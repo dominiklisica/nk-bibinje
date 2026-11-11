@@ -13,6 +13,7 @@ import Gallery from './pages/Gallery'
 import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import Donations from './pages/Donations'
+import Privacy from './pages/Privacy'
 import ComingSoon from './components/ui/ComingSoon'
 import { MEMBERSHIP_ENABLED } from './lib/features'
 
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/galerija" element={<Gallery />} />
         <Route path="/kontakt" element={<Contact />} />
         <Route path="/donacije" element={<Donations />} />
+        <Route path="/privatnost" element={<Privacy />} />
         <Route
           path="/clanarina"
           element={

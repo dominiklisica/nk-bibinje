@@ -1,4 +1,5 @@
 import { MapPin, Calendar, Trophy } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import Crest from '../Crest'
 import { CLUB } from '../../data/club'
 
@@ -25,7 +26,10 @@ export default function Footer() {
           </li>
         </ul>
         <span className="text-muted text-xs">
-          © {new Date().getFullYear()} {CLUB.name}
+          © {new Date().getFullYear()} {CLUB.name} ·{' '}
+          <Link to="/privatnost" className="hover:underline">
+            Privatnost
+          </Link>
         </span>
       </div>
     </footer>

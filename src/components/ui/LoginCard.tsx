@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { LogIn, MailCheck } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { backend } from '../../lib/backend'
 import { DEMO_ADMIN, DEMO_PARENT } from '../../lib/backend/demo'
 
@@ -69,6 +70,13 @@ export default function LoginCard({ intro }: { intro: string }) {
         </button>
       </form>
       {state === 'error' && <p className="mt-2 text-sm text-[var(--club-red)]">{error}</p>}
+      <p className="text-muted mt-3 text-xs">
+        Prijavom prihvaćate da klub vodi evidenciju članarine —{' '}
+        <Link to="/privatnost" className="underline">
+          što se čuva i tko to vidi
+        </Link>
+        .
+      </p>
 
       {demo && (
         <div className="mt-5 rounded-xl border border-dashed border-app p-4 text-sm">
