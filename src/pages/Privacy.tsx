@@ -33,7 +33,10 @@ export default function Privacy() {
           <p>Da bi roditelji mogli vidjeti i platiti članarinu, klub vodi evidenciju:</p>
           <ul>
             <li>ime, prezime, godište i ekipa djeteta te članski broj,</li>
-            <li>e-mail adresa roditelja (s njom se roditelj prijavljuje),</li>
+            <li>
+              ime i prezime te e-mail adresa roditelja (s e-mailom se roditelj prijavljuje; pri prijavi klub dobiva
+              e-mail s imenom djeteta i roditelja),
+            </li>
             <li>uplate članarine: mjesec, iznos, datum i način uplate (izvod iz banke ili gotovina).</li>
           </ul>
           <p>

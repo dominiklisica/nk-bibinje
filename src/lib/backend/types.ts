@@ -49,7 +49,7 @@ export interface Backend {
   getUser(): Promise<SessionUser | null>
   onAuthChange(cb: (u: SessionUser | null) => void): () => void
   /** Supabase: šalje poveznicu za prijavu na e-mail. Demo: prijavljuje odmah. */
-  signIn(email: string): Promise<{ sent: boolean }>
+  signIn(email: string, data?: Record<string, string>): Promise<{ sent: boolean }>
   signOut(): Promise<void>
   isAdmin(): Promise<boolean>
 

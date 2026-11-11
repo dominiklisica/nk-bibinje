@@ -25,10 +25,11 @@ export function supabaseBackend(url: string, key: string): Backend {
       const { data } = db.auth.onAuthStateChange((_e, s) => cb(s?.user.email ? { email: s.user.email.toLowerCase() } : null))
       return () => data.subscription.unsubscribe()
     },
-    async signIn(email) {
+    async signIn(email, data) {
       const { error } = await db.auth.signInWithOtp({
         email: email.trim().toLowerCase(),
-        options: { emailRedirectTo: window.location.href.split('#')[0] },
+        // data (ime djeteta i roditelja) sprema se uz korisnika u Supabase → Authentication → Users
+        options: { emailRedirectTo: window.location.href.split('#')[0], data },
       })
       fail(error)
       return { sent: true }

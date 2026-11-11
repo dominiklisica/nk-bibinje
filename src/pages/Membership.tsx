@@ -118,7 +118,7 @@ export default function Membership() {
           <p className="text-muted">Učitavanje…</p>
         ) : !user ? (
           <Reveal>
-            <LoginCard intro="Prijavite se e-mail adresom koju ste dali klubu pri upisu djeteta. Dobit ćete poveznicu za prijavu — lozinka nije potrebna." />
+            <LoginCard parent intro="Upišite ime i prezime djeteta, svoje ime i prezime te e-mail adresu koju ste dali klubu pri upisu djeteta. Dobit ćete poveznicu za prijavu — lozinka nije potrebna." />
           </Reveal>
         ) : (
           <>
