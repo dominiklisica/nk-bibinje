@@ -5,6 +5,9 @@ Brevo SMTP spojen u Supabase (limit 30 e-mailova/sat), e-mailovi za prijavu na h
 - [ ] kasnije: zamijeniti privremenog pošiljatelja (osobni Gmail) adresom kluba
 - [ ] kasnije: Web3Forms ključ (kontakt obrazac + obavijest o prijavi roditelja) zasad šalje na osobni e-mail — prebaciti na e-mail kluba (novi ključ na web3forms.com → `src/data/contact.ts`)
 
+## Zahtjevi roditelja za upis — ✅ gotovo (11. 11. 2026.)
+Roditelj se prijavi s imenom djeteta, klub potvrdi u /klub → Zahtjevi (tablica `join_requests`, supabase/02-zahtjevi.sql pokrenut).
+
 ## 2. Podaci kluba za uplate → `src/data/payments.ts`
 - [ ] naziv, adresa i IBAN kluba (točno kako idu na uplatnicu)
 - [ ] mjesečna članarina po uzrastu: seniori, pioniri, mlađi pioniri, limači 7+1, limači 6+1
