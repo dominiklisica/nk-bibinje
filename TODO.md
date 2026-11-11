@@ -23,8 +23,8 @@ Probno dijete dodano, roditelj vidi samo svoje dijete, ručna uplata se prikazuj
 - [ ] e-mailovi tajnika i blagajnika → `insert into public.admins ...` u Supabase SQL editoru
 
 ## Po potrebi
-- [ ] novi rezultati (`npm run sync`) i vijesti s Facebooka
-- [ ] kratka izjava o privatnosti za roditelje (čuvaju se podaci o djeci)
+- [ ] novi rezultati (`npm run sync`) — od 11. 11. 2026. HNS Semafor traži Cloudflare provjeru („Potvrdite da ste osoba”), skripta dobiva 403
+- [x] izjava o privatnosti (/privatnost) — klub neka pregleda tekst
 
 ## Objava na hosting (procesor.com.hr/lisica/nk_bibinje)
 Build bez `.env.local` (u njoj su osobni probni podaci), samo sa Supabase varijablama:
