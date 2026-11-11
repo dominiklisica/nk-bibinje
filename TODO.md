@@ -1,10 +1,8 @@
 # Što je još ostalo (stanje 10. 11. 2026.)
 
-## 1. Slanje e-maila za prijavu — najvažnije
-Supabase bez vlastitog SMTP-a šalje samo **2 e-maila na sat**. Spojiti besplatni servis
-(**Brevo** — 300/dan, ili **Gmail kluba** s lozinkom za aplikacije) u
-Supabase → Authentication → Emails → SMTP Settings, pa podići limit.
-- [ ] odlučiti s koje adrese kluba stižu e-mailovi
+## 1. Slanje e-maila za prijavu — ✅ gotovo (11. 11. 2026.)
+Brevo SMTP spojen u Supabase (limit 30 e-mailova/sat), e-mailovi za prijavu na hrvatskom.
+- [ ] kasnije: zamijeniti privremenog pošiljatelja (osobni Gmail) adresom kluba
 
 ## 2. Podaci kluba za uplate → `src/data/payments.ts`
 - [ ] naziv, adresa i IBAN kluba (točno kako idu na uplatnicu)
@@ -16,9 +14,10 @@ Supabase → Authentication → Emails → SMTP Settings, pa podići limit.
 - [ ] koja je banka kluba i u kojem formatu se izvod preuzima (XML camt.053 ili CSV)
 - [ ] primjer izvoda (iznosi mogu biti izbrisani) za provjeru uparivanja
 
-## 4. Test s pravom bazom
-- [ ] dodati probno dijete, prijaviti se kao roditelj, označiti uplatu
-- [ ] obrisati probne podatke i probne retke iz `.env.local` (osobni IBAN, `VITE_TEST_MONTHLY_FEE`)
+## 4. Test s pravom bazom — ✅ gotovo (11. 11. 2026.)
+Probno dijete dodano, roditelj vidi samo svoje dijete, ručna uplata se prikazuje roditelju.
+`.env.local` očišćen (ostale samo Supabase postavke).
+- [ ] obrisati člana „Probno Dijete” (i eventualnog člana br. 101) u /klub → Članovi
 
 ## 5. Administratori
 - [ ] e-mailovi tajnika i blagajnika → `insert into public.admins ...` u Supabase SQL editoru
