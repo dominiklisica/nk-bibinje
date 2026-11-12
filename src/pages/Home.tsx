@@ -316,6 +316,29 @@ export default function Home() {
             </section>
           </Reveal>
         </div>
+
+        <Reveal>
+          <Link
+            to="/skola-nogometa"
+            className="card-hover group relative mt-12 flex min-h-[200px] items-end overflow-hidden rounded-3xl p-7 text-white sm:p-9"
+          >
+            <img
+              src={asset('/slike/galerija/druzenje-uz-svlacionicu.webp?v=1')}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              style={{ objectPosition: 'center 45%' }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-[color:var(--club-primary-700)] via-[color:var(--club-primary-700)]/80 to-transparent" />
+            <div className="relative max-w-lg">
+              <span className="text-xs font-bold uppercase tracking-[0.2em] text-white/75">Škola nogometa</span>
+              <h2 className="mt-1 font-display text-3xl font-extrabold uppercase leading-tight sm:text-4xl">Upiši dijete u NK Bibinje</h2>
+              <p className="mt-2 text-white/85">Uzrasti, treneri i kako se upisati — sve na jednom mjestu.</p>
+              <span className="mt-4 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 font-display font-bold uppercase tracking-wide text-[var(--club-primary-700)]">
+                Saznaj više <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              </span>
+            </div>
+          </Link>
+        </Reveal>
       </div>
     </div>
   )

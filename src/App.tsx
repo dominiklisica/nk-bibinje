@@ -14,6 +14,7 @@ import Contact from './pages/Contact'
 import NotFound from './pages/NotFound'
 import Donations from './pages/Donations'
 import Privacy from './pages/Privacy'
+import School from './pages/School'
 import ComingSoon from './components/ui/ComingSoon'
 import { MEMBERSHIP_ENABLED } from './lib/features'
 
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/kontakt" element={<Contact />} />
         <Route path="/donacije" element={<Donations />} />
         <Route path="/privatnost" element={<Privacy />} />
+        <Route path="/skola-nogometa" element={<School />} />
         <Route
           path="/clanarina"
           element={
