@@ -116,7 +116,7 @@ async function savePhoto(url, base) {
 
 // ---------------------------------------------------------------- dohvat
 
-async function scrapeTeam(cid) {
+async function scrapeTeam(cid, cachedDetails = {}) {
   const d = await get(`${BASE}/klubovi/${CLUB_ID}/nk-bibinje/?cid=${cid}`)
   const matches = d.querySelectorAll('.matchlist li.row').map((li) => {
     const dm = t(li.querySelector('.date')).match(/(\d{2})\.(\d{2})\.(\d{4})\.\s*(\d{2}:\d{2})?/)
@@ -174,6 +174,11 @@ async function scrapeTeam(cid) {
 
   const details = {}
   for (const m of matches.filter((x) => x.url)) {
+    // Zapisnik odigrane utakmice se ne mijenja — koristi spremljeni.
+    if (cachedDetails[m.semaforId] && m.homeScore !== null) {
+      details[m.semaforId] = cachedDetails[m.semaforId]
+      continue
+    }
     await sleep(300)
     const md = await get(m.url)
     const lines = md.querySelector('main').structuredText.split('\n').map((s) => s.trim()).filter(Boolean)
@@ -440,8 +445,37 @@ ${coachLines.join('\n')}
   )
 }
 
+// Sirovi podaci svake ekipe spremaju se u scripts/semafor-raw/<ekipa>.json.
+//  - Zapisnici odigranih utakmica se ne mijenjaju, pa se sljedeći put ne dohvaćaju ponovo.
+//  - `npm run sync -- --from-raw` ne dohvaća ništa, nego generira iz tih datoteka
+//    (za kad Semafor blokira skriptu, a podaci se pročitaju u pregledniku — vidi semafor-browser.js).
+const RAW_DIR = join(ROOT, 'scripts/semafor-raw')
+const FROM_RAW = process.argv.includes('--from-raw')
+const rawFile = (key) => join(RAW_DIR, `${key}.json`)
+const readRaw = (key) => (existsSync(rawFile(key)) ? JSON.parse(readFileSync(rawFile(key), 'utf8')) : null)
+
+// Grbovi koje su prijašnja pokretanja već preuzela ostaju (i kad se generira samo dio ekipa).
+const prevCrests = join(ROOT, 'src/data/teams/crests.ts')
+if (existsSync(prevCrests)) {
+  for (const [, name, file] of readFileSync(prevCrests, 'utf8').matchAll(/^\s+"(.+?)":\s*"(.+?)"/gm)) {
+    if (existsSync(join(ROOT, 'public', file))) youthCrests[name] = file
+  }
+}
+
+mkdirSync(RAW_DIR, { recursive: true })
 for (const team of TEAMS) {
-  await generate(team, await scrapeTeam(team.cid))
+  let data
+  if (FROM_RAW) {
+    data = readRaw(team.key)
+    if (!data) {
+      console.log(`${team.key.padEnd(15)} preskočeno (nema ${team.key}.json)`)
+      continue
+    }
+  } else {
+    data = await scrapeTeam(team.cid, readRaw(team.key)?.details ?? {})
+    writeFileSync(rawFile(team.key), JSON.stringify(data, null, 1))
+  }
+  await generate(team, data)
 }
 
 writeFileSync(

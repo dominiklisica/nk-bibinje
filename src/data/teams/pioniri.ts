@@ -1,5 +1,5 @@
 // MŽNL Pioniri A 2026/27 — generirano skriptom scripts/semafor-sync.mjs (npm run sync)
-// iz HNS Semafora (COMET), stanje 2026-11-09. Ne uređuj ručno: sljedeće pokretanje prepisuje datoteku.
+// iz HNS Semafora (COMET), stanje 2026-11-12. Ne uređuj ručno: sljedeće pokretanje prepisuje datoteku.
 import type { Coach, Match, MatchDetail, Player, StandingRow } from '../../types'
 
 const STADIUM = 'Igralište Franka Lisice, Bibinje'
@@ -12,7 +12,7 @@ export const MATCHES: Match[] = [
   { id: "pio-05", date: "2026-10-14", time: "19:00", home: "NŠK Sveti Mihovil", away: "NK Bibinje", homeScore: 6, awayScore: 1, competition: COMP, round: 5, venue: "Na Foši, Sutomišćica", status: "finished" },
   { id: "pio-06", date: "2026-10-29", time: "19:30", home: "NK Bibinje", away: "NK Hajduk (P)", homeScore: 5, awayScore: 0, competition: COMP, round: 6, venue: "Igralište Franka Lisice, Bibinje", status: "finished" },
   { id: "pio-07", date: "2026-11-08", time: "10:00", home: "NK Hrvatski vitez", away: "NK Bibinje", homeScore: null, awayScore: null, competition: COMP, round: 7, status: "postponed" },
-  { id: "pio-04", date: "2026-11-09", time: "18:00", home: "NK Bibinje", away: "NK Novalja 2", homeScore: null, awayScore: null, competition: COMP, round: 4, venue: STADIUM, status: "upcoming" },
+  { id: "pio-04", date: "2026-11-09", time: "18:00", home: "NK Bibinje", away: "NK Novalja 2", homeScore: 1, awayScore: 2, competition: COMP, round: 4, venue: "Igralište Franka Lisice, Bibinje", status: "finished" },
   { id: "pio-08", date: "2026-11-15", time: "10:00", home: "NK Bibinje", away: "NK Zara", homeScore: null, awayScore: null, competition: COMP, round: 8, venue: STADIUM, status: "upcoming" },
   { id: "pio-09", date: "2026-11-22", time: "10:00", home: "NŠK Pag", away: "NK Bibinje", homeScore: null, awayScore: null, competition: COMP, round: 9, status: "upcoming" },
   { id: "pio-10", date: "2026-11-29", time: "10:00", home: "NK Škabrnja '91", away: "NK Bibinje", homeScore: null, awayScore: null, competition: COMP, round: 10, status: "upcoming" },
@@ -513,6 +513,86 @@ export const MATCH_DETAILS: Record<string, MatchDetail> = {
       ],
       "coach": "Ante Jergan"
     }
+  },
+  "pio-04": {
+    "id": "pio-04",
+    "round": 4,
+    "venue": "Igralište Franka Lisice, Bibinje",
+    "attendance": 50,
+    "referees": [
+      "Josip Barić"
+    ],
+    "goals": [
+      {
+        "side": "home",
+        "player": "Mihael Režan",
+        "minute": "9'"
+      },
+      {
+        "side": "away",
+        "player": "Mauro Paladina",
+        "minute": "21'"
+      },
+      {
+        "side": "away",
+        "player": "Mauro Paladina",
+        "minute": "31'"
+      }
+    ],
+    "events": [
+      {
+        "side": "away",
+        "type": "yellow",
+        "minute": "67'",
+        "player": "Patrik Peraica"
+      }
+    ],
+    "home": {
+      "team": "NK Bibinje",
+      "starters": [
+        "40 Jakov Delija",
+        "4 Dominik Ćuković",
+        "6 Mihael Režan",
+        "7 Mateo Šindija (C)",
+        "8 Toni Erceg",
+        "9 Emanuel Šindija",
+        "10 Karlo Petković",
+        "11 Daniel Lalić",
+        "17 Reno Sikirić",
+        "20 Rafael Kero",
+        "21 Emanuel Lisica"
+      ],
+      "bench": [
+        "99 Šime Kero",
+        "2 Antoni Delija",
+        "5 Ivano Sorić",
+        "13 Ante Lonić",
+        "14 Marko Režan",
+        "22 Marko Sikirić",
+        "77 Šime Vuica"
+      ],
+      "coach": "Mateo Bralić"
+    },
+    "away": {
+      "team": "NK Novalja 2",
+      "starters": [
+        "12 Duje Šarić",
+        "2 Patrik Peraica",
+        "3 Roko Veršić",
+        "4 Vito Datković",
+        "5 Leon Selimbegović",
+        "8 Mihael Rizner",
+        "9 Reno Dabo",
+        "10 Mauro Paladina (C)",
+        "14 Karlo Pusić",
+        "19 Stipe Smojver",
+        "25 Arijan Šanko"
+      ],
+      "bench": [
+        "13 Lukas Zubović Jović"
+      ],
+      "coach": "Tomislav Perković"
+    }
   }
 }
 
@@ -521,9 +601,9 @@ export const STANDINGS: StandingRow[] = [
   { position: 2, club: "NK Abeceda sporta 2", played: 7, won: 4, drawn: 2, lost: 1, goalsFor: 22, goalsAgainst: 7, goalDiff: 15, points: 14 },
   { position: 3, club: "NK Zara", played: 5, won: 4, drawn: 0, lost: 1, goalsFor: 22, goalsAgainst: 7, goalDiff: 15, points: 12 },
   { position: 4, club: "NK Škabrnja '91", played: 5, won: 4, drawn: 0, lost: 1, goalsFor: 10, goalsAgainst: 9, goalDiff: 1, points: 12 },
-  { position: 5, club: "NK Hajduk (P)", played: 6, won: 3, drawn: 1, lost: 2, goalsFor: 10, goalsAgainst: 9, goalDiff: 1, points: 10 },
-  { position: 6, club: "NK Bibinje", played: 5, won: 3, drawn: 0, lost: 2, goalsFor: 19, goalsAgainst: 11, goalDiff: 8, points: 9 },
-  { position: 7, club: "NK Novalja 2", played: 5, won: 2, drawn: 1, lost: 2, goalsFor: 22, goalsAgainst: 9, goalDiff: 13, points: 7 },
+  { position: 5, club: "NK Novalja 2", played: 6, won: 3, drawn: 1, lost: 2, goalsFor: 24, goalsAgainst: 10, goalDiff: 14, points: 10 },
+  { position: 6, club: "NK Hajduk (P)", played: 6, won: 3, drawn: 1, lost: 2, goalsFor: 10, goalsAgainst: 9, goalDiff: 1, points: 10 },
+  { position: 7, club: "NK Bibinje", played: 6, won: 3, drawn: 0, lost: 3, goalsFor: 20, goalsAgainst: 13, goalDiff: 7, points: 9 },
   { position: 8, club: "NŠK Sveti Mihovil", played: 5, won: 2, drawn: 0, lost: 3, goalsFor: 14, goalsAgainst: 15, goalDiff: -1, points: 6 },
   { position: 9, club: "NK Zadarnova", played: 7, won: 1, drawn: 0, lost: 6, goalsFor: 12, goalsAgainst: 25, goalDiff: -13, points: 3 },
   { position: 10, club: "NK Gospić 91 2", played: 5, won: 1, drawn: 0, lost: 4, goalsFor: 7, goalsAgainst: 22, goalDiff: -15, points: 3 },
@@ -532,30 +612,31 @@ export const STANDINGS: StandingRow[] = [
 ]
 
 export const SQUAD: Player[] = [
-  { id: "pio-jakov-delija", number: 17, name: "Jakov Delija", position: "GK", appearances: 5, minutes: 0, goals: 0, goalsConceded: 6, yellowCards: 0, redCards: 0, photo: "/players/pioniri/jakov-delija.png" },
-  { id: "pio-sime-kero", number: 99, name: "Šime Kero", position: "GK", appearances: 3, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/sime-kero.png" },
+  { id: "pio-jakov-delija", number: 40, name: "Jakov Delija", position: "GK", appearances: 6, minutes: 0, goals: 0, goalsConceded: 8, yellowCards: 0, redCards: 0, photo: "/players/pioniri/jakov-delija.png" },
+  { id: "pio-sime-kero", number: 99, name: "Šime Kero", position: "GK", appearances: 4, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/sime-kero.png" },
   { id: "pio-robert-sikiric", number: 12, name: "Robert Sikirić", position: "GK", appearances: 5, minutes: 0, goals: 0, goalsConceded: 5, yellowCards: 0, redCards: 0, photo: "/players/pioniri/robert-sikiric.jpg" },
-  { id: "pio-dominik-cukovic", number: 4, name: "Dominik Ćuković", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/dominik-cukovic.jpg" },
-  { id: "pio-antoni-delija", number: 2, name: "Antoni Delija", position: "OUTFIELD", appearances: 2, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/antoni-delija.png" },
-  { id: "pio-toni-erceg", number: 8, name: "Toni Erceg", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 2, yellowCards: 0, redCards: 0, photo: "/players/pioniri/toni-erceg.jpg" },
-  { id: "pio-rafael-kero", number: 20, name: "Rafael Kero", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 1, yellowCards: 1, redCards: 0, photo: "/players/pioniri/rafael-kero.jpg" },
+  { id: "pio-dominik-cukovic", number: 4, name: "Dominik Ćuković", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/dominik-cukovic.jpg" },
+  { id: "pio-antoni-delija", number: 2, name: "Antoni Delija", position: "OUTFIELD", appearances: 3, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/antoni-delija.png" },
+  { id: "pio-toni-erceg", number: 8, name: "Toni Erceg", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 2, yellowCards: 0, redCards: 0, photo: "/players/pioniri/toni-erceg.jpg" },
+  { id: "pio-rafael-kero", number: 20, name: "Rafael Kero", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 1, yellowCards: 1, redCards: 0, photo: "/players/pioniri/rafael-kero.jpg" },
   { id: "pio-krizo-kinda", number: 3, name: "Križo Kinda", position: "OUTFIELD", appearances: 4, minutes: 0, goals: 1, yellowCards: 0, redCards: 0, photo: "/players/pioniri/krizo-kinda.jpg" },
-  { id: "pio-daniel-lalic", number: 11, name: "Daniel Lalić", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 3, yellowCards: 0, redCards: 0, photo: "/players/pioniri/daniel-lalic.jpg" },
-  { id: "pio-emanuel-lisica", number: 21, name: "Emanuel Lisica", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 0, yellowCards: 1, redCards: 0, photo: "/players/pioniri/emanuel-lisica.jpg" },
+  { id: "pio-daniel-lalic", number: 11, name: "Daniel Lalić", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 3, yellowCards: 0, redCards: 0, photo: "/players/pioniri/daniel-lalic.jpg" },
+  { id: "pio-emanuel-lisica", number: 21, name: "Emanuel Lisica", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 0, yellowCards: 1, redCards: 0, photo: "/players/pioniri/emanuel-lisica.jpg" },
   { id: "pio-nediljko-lisica", number: 17, name: "Nediljko Lisica", position: "OUTFIELD", appearances: 3, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/nediljko-lisica.png" },
-  { id: "pio-ante-lonic", number: 13, name: "Ante Lonić", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 3, yellowCards: 0, redCards: 0, photo: "/players/pioniri/ante-lonic.jpg" },
-  { id: "pio-karlo-petkovic", number: 10, name: "Karlo Petković", position: "OUTFIELD", appearances: 4, minutes: 0, goals: 6, yellowCards: 1, redCards: 0, photo: "/players/pioniri/karlo-petkovic.png" },
-  { id: "pio-marko-rezan", number: 14, name: "Marko Režan", position: "OUTFIELD", appearances: 2, minutes: 0, goals: 1, yellowCards: 0, redCards: 0, photo: "/players/pioniri/marko-rezan.png" },
-  { id: "pio-mihael-rezan", number: 6, name: "Mihael Režan", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 1, yellowCards: 1, redCards: 0, photo: "/players/pioniri/mihael-rezan.jpg" },
-  { id: "pio-marko-sikiric", number: 22, name: "Marko Sikirić", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/marko-sikiric.png" },
-  { id: "pio-reno-sikiric", number: 5, name: "Reno Sikirić", position: "OUTFIELD", appearances: 1, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/reno-sikiric.png" },
-  { id: "pio-ivano-soric", number: 5, name: "Ivano Sorić", position: "OUTFIELD", appearances: 2, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/ivano-soric.png" },
+  { id: "pio-ante-lonic", number: 13, name: "Ante Lonić", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 3, yellowCards: 0, redCards: 0, photo: "/players/pioniri/ante-lonic.jpg" },
+  { id: "pio-karlo-petkovic", number: 10, name: "Karlo Petković", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 6, yellowCards: 1, redCards: 0, photo: "/players/pioniri/karlo-petkovic.png" },
+  { id: "pio-marko-rezan", number: 14, name: "Marko Režan", position: "OUTFIELD", appearances: 3, minutes: 0, goals: 1, yellowCards: 0, redCards: 0, photo: "/players/pioniri/marko-rezan.png" },
+  { id: "pio-mihael-rezan", number: 6, name: "Mihael Režan", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 2, yellowCards: 1, redCards: 0, photo: "/players/pioniri/mihael-rezan.jpg" },
+  { id: "pio-marko-sikiric", number: 22, name: "Marko Sikirić", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/marko-sikiric.png" },
+  { id: "pio-reno-sikiric", number: 17, name: "Reno Sikirić", position: "OUTFIELD", appearances: 2, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/reno-sikiric.png" },
+  { id: "pio-ivano-soric", number: 5, name: "Ivano Sorić", position: "OUTFIELD", appearances: 3, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/ivano-soric.png" },
   { id: "pio-ante-toni-simunic", number: 19, name: "Ante-Toni Šimunić", position: "OUTFIELD", appearances: 4, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/ante-toni-simunic.png" },
-  { id: "pio-emanuel-sindija", number: 9, name: "Emanuel Šindija", position: "OUTFIELD", appearances: 3, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/emanuel-sindija.png" },
-  { id: "pio-mateo-sindija", number: 7, name: "Mateo Šindija", position: "OUTFIELD", appearances: 5, minutes: 0, goals: 1, yellowCards: 1, redCards: 0, photo: "/players/pioniri/mateo-sindija.png" },
-  { id: "pio-sime-vuica", number: 77, name: "Šime Vuica", position: "OUTFIELD", appearances: 1, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/sime-vuica.jpg" },
+  { id: "pio-emanuel-sindija", number: 9, name: "Emanuel Šindija", position: "OUTFIELD", appearances: 4, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/emanuel-sindija.png" },
+  { id: "pio-mateo-sindija", number: 7, name: "Mateo Šindija", position: "OUTFIELD", appearances: 6, minutes: 0, goals: 1, yellowCards: 1, redCards: 0, photo: "/players/pioniri/mateo-sindija.png" },
+  { id: "pio-sime-vuica", number: 77, name: "Šime Vuica", position: "OUTFIELD", appearances: 2, minutes: 0, goals: 0, yellowCards: 0, redCards: 0, photo: "/players/pioniri/sime-vuica.jpg" },
 ]
 
 export const COACHES: Coach[] = [
+  { name: "Mateo Bralić", matches: 1, photo: "/players/pioniri/mateo-bralic.png" },
   { name: "Antonio Kunce", matches: 5, photo: "/players/pioniri/antonio-kunce.png" },
 ]
