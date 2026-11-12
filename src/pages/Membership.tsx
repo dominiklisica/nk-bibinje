@@ -137,6 +137,11 @@ function JoinRequests({ email, hasChildren }: { email: string; hasChildren: bool
 
   return (
     <>
+      {requests.error && (
+        <p className="text-sm text-[var(--club-red)]">
+          Zahtjev za upis se nije mogao poslati klubu. Osvježite stranicu ili kliknite „Pošalji zahtjev za upis”.
+        </p>
+      )}
       {waiting.map((r) => (
         <div key={r.id} className="flex items-start gap-3 rounded-2xl border border-dashed border-app p-5">
           <Hourglass size={20} className="mt-0.5 shrink-0 text-[var(--club-primary)]" />
