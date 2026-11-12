@@ -18,6 +18,23 @@ export interface NewsItem {
   facebook?: boolean
   /** Odigrana utakmica na koju se vijest odnosi — prikazuje poveznicu na detalje. */
   matchId?: string
+  /** Fotografija vijesti (CMS: /slike/vijesti/...). Bez nje se koristi klupska fotografija. */
+  image?: string
+}
+
+// Klupske fotografije za vijesti bez vlastite slike (ukrasne, nisu s tog događaja).
+const FALLBACK_IMAGES: Record<NewsCategory, string[]> = {
+  Najava: ['/slike/galerija/momcad.jpg?v=1', '/slike/galerija/navijaci-tribina.jpg?v=1', '/slike/galerija/momcad-prugasti-dresovi.jpg?v=1'],
+  Izvještaj: ['/slike/galerija/utakmica-duel.jpg?v=1', '/slike/galerija/slavlje-3.jpg?v=1', '/slike/galerija/slavlje-svlacionica-mladi.jpg?v=1'],
+  Obavijest: ['/slike/galerija/navijaci.jpg?v=1', '/slike/galerija/druzenje-uz-svlacionicu.webp?v=1'],
+}
+
+/** Slika vijesti: vlastita, ili uvijek ista klupska fotografija za tu vijest. */
+export function newsImage(item: NewsItem): string {
+  if (item.image) return item.image
+  const list = FALLBACK_IMAGES[item.category]
+  const hash = [...item.id].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7)
+  return list[hash % list.length]
 }
 
 type NewsFile = Omit<NewsItem, 'id' | 'body'> & { body: string }
@@ -34,6 +51,7 @@ export const NEWS: NewsItem[] = Object.entries(files)
     ...n,
     id: path.split('/').pop()!.replace(/\.json$/, ''),
     matchId: n.matchId || undefined,
+    image: n.image || undefined,
     body: n.body
       .split(/\n\s*\n/)
       .map((p) => p.trim())

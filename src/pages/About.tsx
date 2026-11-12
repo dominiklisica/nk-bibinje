@@ -1,4 +1,5 @@
-import { Calendar, MapPin, Trophy, Shield, Star, Flag } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Calendar, MapPin, Trophy, Shield, Star, Flag, ArrowRight } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
 import Crest from '../components/Crest'
@@ -157,6 +158,22 @@ export default function About() {
             ))}
           </div>
         </div>
+
+        <Reveal className="mt-10">
+          <Link
+            to="/povijest"
+            className="card-hover flex flex-wrap items-center justify-between gap-4 rounded-2xl p-6 text-white"
+            style={{ background: 'linear-gradient(135deg, var(--club-primary-700), var(--club-primary))' }}
+          >
+            <div>
+              <div className="font-display text-2xl font-extrabold uppercase">Povijest sezona</div>
+              <p className="text-white/85">Plasmani, tablice, rezultati i strijelci svih sezona od 2004./05.</p>
+            </div>
+            <span className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 font-display font-bold uppercase text-[var(--club-primary-700)]">
+              Otvori <ArrowRight size={18} />
+            </span>
+          </Link>
+        </Reveal>
 
         {/* Informacije */}
         <Reveal className="mt-16">

@@ -1,8 +1,10 @@
-import { Link } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { ExternalLink, Calendar, ChevronRight } from 'lucide-react'
 import PageHeader from '../components/ui/PageHeader'
 import Reveal from '../components/ui/Reveal'
-import { NEWS, NEWS_SOURCE, type NewsCategory } from '../data/news'
+import { asset } from '../lib/asset'
+import { NEWS, NEWS_SOURCE, newsImage, type NewsCategory } from '../data/news'
 
 const LINK_CLASS =
   'mt-5 mr-5 inline-flex items-center gap-1.5 font-display text-sm font-bold uppercase tracking-wide text-[var(--club-primary)] hover:underline'
@@ -22,6 +24,16 @@ function formatDate(iso: string) {
 }
 
 export default function News() {
+  // Poveznica s naslovnice (/vijesti#id) skrola do te vijesti.
+  const { hash } = useLocation()
+  useEffect(() => {
+    if (!hash) return
+    // Nakon Layoutovog skrola na vrh; ponovo kad se učitaju slike iznad (pomaknu vijest).
+    const go = () => document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView()
+    const timers = [setTimeout(go, 100), setTimeout(go, 700)]
+    return () => timers.forEach(clearTimeout)
+  }, [hash])
+
   return (
     <div>
       <PageHeader
@@ -36,9 +48,13 @@ export default function News() {
           {NEWS.map((item, i) => (
             <Reveal key={item.id} delay={Math.min(i * 0.06, 0.3)}>
               <article
-                className="card-hover overflow-hidden rounded-2xl border border-app"
+                id={item.id}
+                className="card-hover scroll-mt-24 overflow-hidden rounded-2xl border border-app"
                 style={{ backgroundColor: 'var(--surface)' }}
               >
+                <div className="relative h-44 sm:h-56">
+                  <img src={asset(newsImage(item))} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                </div>
                 <div
                   className="h-1.5 w-full"
                   style={{ background: CAT_STYLE[item.category] }}

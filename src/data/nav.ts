@@ -3,6 +3,8 @@ import { MEMBERSHIP_ENABLED } from '../lib/features'
 export interface NavItem {
   to: string
   label: string
+  /** Kraći naziv za vodoravni izbornik na širokom ekranu (u mobilnom izborniku puni naziv). */
+  short?: string
 }
 
 const ALL_ITEMS: NavItem[] = [
@@ -11,7 +13,7 @@ const ALL_ITEMS: NavItem[] = [
   { to: '/momcad', label: 'Momčad' },
   { to: '/tablica', label: 'Tablica' },
   { to: '/statistika', label: 'Statistika' },
-  { to: '/skola-nogometa', label: 'Škola nogometa' },
+  { to: '/skola-nogometa', label: 'Škola nogometa', short: 'Škola' },
   { to: '/o-klubu', label: 'O klubu' },
   { to: '/vijesti', label: 'Vijesti' },
   { to: '/galerija', label: 'Galerija' },

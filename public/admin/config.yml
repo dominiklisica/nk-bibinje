@@ -39,6 +39,11 @@ collections:
         label: Kratki sažetak
         widget: text
         required: false
+      - name: image
+        label: Fotografija
+        widget: image
+        required: false
+        hint: Prikazuje se na naslovnici i uz vijest. Bez nje se koristi klupska fotografija.
       - name: body
         label: Tekst
         widget: text

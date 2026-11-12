@@ -21,6 +21,8 @@ import { MEMBERSHIP_ENABLED } from './lib/features'
 // Članarina i evidencija kluba koriste bazu (Supabase) — učitavaju se tek kad se otvore.
 const Membership = lazy(() => import('./pages/Membership'))
 const ClubAdmin = lazy(() => import('./pages/ClubAdmin'))
+// Povijest ima podatke 22 sezone — učitava se tek kad se otvori.
+const History = lazy(() => import('./pages/History'))
 const loadingPage = <div className="text-muted mx-auto max-w-4xl px-4 pb-16 pt-28">Učitavanje…</div>
 
 export default function App() {
@@ -40,6 +42,14 @@ export default function App() {
         <Route path="/donacije" element={<Donations />} />
         <Route path="/privatnost" element={<Privacy />} />
         <Route path="/skola-nogometa" element={<School />} />
+        <Route
+          path="/povijest"
+          element={
+            <Suspense fallback={loadingPage}>
+              <History />
+            </Suspense>
+          }
+        />
         <Route
           path="/clanarina"
           element={

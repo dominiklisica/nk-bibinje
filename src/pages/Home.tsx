@@ -16,6 +16,9 @@ import FormBadges from '../components/ui/FormBadges'
 import Reveal from '../components/ui/Reveal'
 import TeamPicker from '../components/ui/TeamPicker'
 import InstallButton from '../components/ui/InstallButton'
+import HomeNews from '../components/home/HomeNews'
+import HomePlayers from '../components/home/HomePlayers'
+import OnThisDay from '../components/home/OnThisDay'
 import { CLUB } from '../data/club'
 import type { StandingRow } from '../types'
 import { useTeam } from '../hooks/useTeam'
@@ -134,6 +137,9 @@ export default function Home() {
       </section>
 
       <div className="mx-auto max-w-7xl space-y-20 px-4 py-20 sm:px-6">
+        {/* ================= VIJESTI ================= */}
+        <HomeNews />
+
         {/* ================= SLJEDEĆA UTAKMICA ================= */}
         {next && (
           <Reveal>
@@ -219,6 +225,9 @@ export default function Home() {
             </div>
           </section>
         </Reveal>
+
+        {/* ================= MOMČAD ================= */}
+        <HomePlayers />
 
         {/* ================= MINI TABLICA + STRIJELCI ================= */}
         <div className="grid gap-10 lg:grid-cols-2">
@@ -316,6 +325,8 @@ export default function Home() {
             </section>
           </Reveal>
         </div>
+
+        <OnThisDay />
 
         <Reveal>
           <Link

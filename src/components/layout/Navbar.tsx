@@ -36,7 +36,7 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   }, [open])
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `nav-link px-3 py-2 rounded-md font-display font-semibold uppercase tracking-wide text-sm transition-colors ${
+    `nav-link whitespace-nowrap px-2.5 py-2 rounded-md font-display font-semibold uppercase tracking-wide text-sm transition-colors ${
       isActive
         ? 'is-active text-[var(--club-primary)]'
         : 'text-[var(--text)] hover:text-[var(--club-primary)]'
@@ -63,8 +63,8 @@ export default function Navbar({ theme, toggleTheme }: NavbarProps) {
 
         <nav className="hidden items-center gap-0.5 xl:flex">
           {NAV_ITEMS.map((item) => (
-            <NavLink key={item.to} to={item.to} className={linkClass} end={item.to === '/'}>
-              {item.label}
+            <NavLink key={item.to} to={item.to} className={linkClass} end={item.to === '/'} title={item.short ? item.label : undefined}>
+              {item.short ?? item.label}
             </NavLink>
           ))}
         </nav>
